@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ur-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mehboob's Signature Scent</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#EDF1EF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Signature Scent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF1EF; --surface:#FFFFFF; --ink:#1D2928; --muted:#62706E; --line:#D6DEDB;
+  --amber:#C2893A; --teal:#2F6F69; --glass:#DCE7E4;
+  --summer-bg:#DCEFEA; --summer:#2E6B5E; --winter-bg:#F3E3D3; --winter:#93531F; --all-bg:#E6E4F3; --all:#4B4680;
+  --shadow:0 1px 0 rgba(29,41,40,.06); --bottle:#D3DFDB; --bottle-text:#4E5D5A; --spark:#2e3b39;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141B1A; --surface:#1D2725; --ink:#E8EEEC; --muted:#9AA9A6; --line:#2E3B39;
+    --amber:#D9A257; --teal:#5FA79F; --glass:#26332F;
+    --summer-bg:#1E3631; --summer:#8ED0C0; --winter-bg:#3A2A1C; --winter:#E7B07A; --all-bg:#2A2840; --all:#B9B4E8;
+    --shadow:none; --bottle:#26332f; --bottle-text:#9AA9A6; --spark:#5FA79F;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141B1A; --surface:#1D2725; --ink:#E8EEEC; --muted:#9AA9A6; --line:#2E3B39;
+  --amber:#D9A257; --teal:#5FA79F; --glass:#26332F;
+  --summer-bg:#1E3631; --summer:#8ED0C0; --winter-bg:#3A2A1C; --winter:#E7B07A; --all-bg:#2A2840; --all:#B9B4E8;
+  --shadow:none; --bottle:#26332f; --bottle-text:#9AA9A6; --spark:#5FA79F;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Figtree",Arial,Helvetica,sans-serif;font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:6px}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 110px}
+
+header.top{padding:22px 0 8px}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.appbar{display:flex;align-items:center;gap:10px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.appname{font-size:21px;font-weight:800;letter-spacing:-.01em;line-height:1.1}
+.appname span{color:var(--amber)}
+h1{font-size:24px;line-height:1.05;letter-spacing:-.02em;margin:0;font-weight:800}
+h1 small{display:block;font-size:14px;font-weight:500;color:var(--muted);letter-spacing:0;margin-top:6px}
+.count{font-size:13px;color:var(--muted);white-space:nowrap}
+
+.search{position:relative;margin:16px 0 10px}
+.search input{width:100%;padding:13px 14px 13px 40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:16px}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);padding:7px 13px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.group-title{font-size:18px;font-weight:700;margin:18px 0 8px}
+.group-title span{font-weight:500;color:var(--muted);font-size:14px;margin-left:6px}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;box-shadow:var(--shadow)}
+.item:active{transform:scale(.995)}
+.item .name{font-weight:700;font-size:17px;display:flex;align-items:center;gap:8px}
+.item .id{font-size:12px;color:var(--muted);font-weight:600;min-width:20px}
+.item .sub{grid-column:1/2;color:var(--muted);font-size:14px}
+.item .right{grid-row:1/3;grid-column:2;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.ratio{font-weight:800;color:var(--amber);font-size:15px}
+.tag{font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.t-Summer{background:var(--summer-bg);color:var(--summer)}
+.t-Winter{background:var(--winter-bg);color:var(--winter)}
+.t-All{background:var(--all-bg);color:var(--all)}
+.dots{letter-spacing:1px;font-size:11px;color:var(--ink)}
+.dots .off{color:var(--line)}
+.fav{color:var(--amber);font-size:15px}
+.empty{padding:40px 10px;text-align:center;color:var(--muted)}
+.empty button{margin-top:10px}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav.tabs .in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+nav.tabs button{background:none;border:0;padding:10px 4px 12px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+nav.tabs button[aria-current="page"]{color:var(--ink)}
+nav.tabs button[aria-current="page"] svg{color:var(--amber)}
+
+/* sheet */
+.overlay{position:fixed;inset:0;background:rgba(10,16,15,.45);z-index:10;display:none}
+.overlay.open{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-height:92%;overflow:auto;background:var(--bg);border-radius:20px 20px 0 0;z-index:11;transform:translateY(105%);transition:transform .28s ease;padding:0 0 calc(24px + env(safe-area-inset-bottom,0px))}
+.sheet.open{transform:none}
+.sheet .in{max-width:720px;margin:0 auto;padding:10px 18px 0}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 12px}
+.sheet-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sheet h2{font-size:26px;line-height:1.1;margin:0;font-weight:800;letter-spacing:-.01em}
+.sheet .lead{color:var(--muted);margin:6px 0 0}
+.iconbtn{background:var(--surface);border:1px solid var(--line);border-radius:10px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:none}
+.iconbtn.on{color:var(--amber);border-color:var(--amber)}
+
+.mixer{display:grid;grid-template-columns:104px 1fr;gap:18px;align-items:center;margin:20px 0 6px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.bottle{width:100%;height:auto;display:block}
+.layer{transition:y .4s ease,height .4s ease}
+.sizes{display:flex;gap:6px;margin-bottom:12px}
+.sizes button{flex:1;border:1px solid var(--line);background:transparent;border-radius:10px;padding:7px 0;font-weight:700;cursor:pointer;font-size:14px}
+.sizes button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .lbl{display:flex;align-items:center;gap:8px;font-size:15px;min-width:0}
+.sw{width:12px;height:12px;border-radius:3px;flex:none}
+.row .val{font-weight:800;font-size:20px;white-space:nowrap}
+.row .val small{font-size:12px;color:var(--muted);font-weight:600;margin-left:4px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:600}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px}
+.block h3{margin:0 0 6px;font-size:15px;font-weight:700}
+.block p{margin:0;color:var(--ink)}
+.tip{border-left:3px solid var(--amber)}
+.links{display:flex;flex-direction:column;gap:8px}
+.linkbtn{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 13px;cursor:pointer;text-align:left;width:100%;font-weight:600}
+.linkbtn span{color:var(--muted);font-weight:500;font-size:13px}
+
+.pyramid{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.tier{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 auto;width:100%}
+.tier:nth-child(1){width:78%}
+.tier:nth-child(2){width:89%}
+.tier b{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:2px}
+
+/* custom */
+.form{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.field label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.field select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:16px}
+input[type=range]{width:100%;accent-color:var(--amber)}
+.rangeval{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+.rangeval b{color:var(--ink);font-size:16px}
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+
+.bought{color:var(--summer);font-size:14px;font-weight:800}
+.iconbtn.ok{color:var(--summer);border-color:var(--summer);background:var(--summer-bg)}
+.ok-block{border-color:var(--summer)}
+.muted{color:var(--muted);font-weight:500;font-size:13px}
+.mini{display:block;font-size:13px;color:var(--muted);margin:4px 0 6px}
+textarea,.field input:not([type=range]){font-family:inherit;width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:16px;resize:vertical}
+.block textarea{background:var(--bg)}
+.actions{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px;font-weight:700;cursor:pointer;font-size:15px}
+.btn.danger{color:#B4413C;border-color:#E3B9B6}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.restore{display:block;margin:18px auto 0;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:14px}
+.fab{position:fixed;right:max(18px,calc(50% - 342px));bottom:calc(78px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:18px;border:0;background:var(--amber);color:#fff;font-size:30px;line-height:1;cursor:pointer;z-index:6;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:20}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.sync{font-size:12px;color:var(--summer);font-weight:600;margin-top:4px}
+/* title page */
+.splash{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:24px;text-align:center;cursor:pointer;border:0;width:100%;transition:opacity .5s ease,visibility .5s}
+.splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+.splash .sbottle{width:92px;height:auto;margin-bottom:18px;animation:rise .9s ease both}
+.splash .eyebrow{font-size:13px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);animation:rise .9s .15s ease both}
+.splash .stitle{font-size:clamp(34px,9vw,56px);font-weight:800;letter-spacing:-.025em;line-height:1.05;margin:4px 0 0;animation:rise .9s .25s ease both}
+.splash .stitle span{color:var(--amber)}
+.splash .stag{color:var(--muted);font-size:16px;margin:10px 0 0;animation:rise .9s .4s ease both}
+.splash .enter{margin-top:34px;background:var(--ink);color:var(--bg);border-radius:999px;padding:13px 30px;font-weight:700;font-size:16px;animation:rise .9s .55s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){ .splash,.splash *{animation:none!important;transition:none} }
+@media (min-width:600px){ h1{font-size:28px} .appname{font-size:24px} .mixer{grid-template-columns:130px 1fr} }
+@media (prefers-reduced-motion:reduce){ .sheet,.layer{transition:none} }
+</style>
+</head>
+<body>
+<button class="splash" id="splash" aria-label="App kholein">
+  <svg class="sbottle" viewBox="0 0 22 30" aria-hidden="true"><rect x="7" y="1" width="8" height="5" rx="1.5" fill="var(--ink)"/><rect x="9" y="6" width="4" height="4" fill="var(--ink)"/><rect x="2" y="10" width="18" height="19" rx="5" fill="var(--bottle)" stroke="var(--ink)" stroke-width="1.2"/><rect x="2.75" y="21" width="16.5" height="7.25" rx="4" fill="var(--amber)"/><rect x="2.75" y="18" width="16.5" height="3.5" fill="var(--teal)"/></svg>
+  <div class="eyebrow">Perfume Formulas</div>
+  <div class="stitle">Mehboob's<br><span>Signature Scent</span></div>
+  <p class="stag">Apna khushboo, apna formula</p>
+  <span class="enter">Shuru karein</span>
+</button>
+<div class="wrap">
+  <header class="top">
+    <div class="appbar">
+      <svg width="22" height="30" viewBox="0 0 22 30" aria-hidden="true"><rect x="7" y="1" width="8" height="5" rx="1.5" fill="var(--ink)"/><rect x="9" y="6" width="4" height="4" fill="var(--ink)"/><rect x="2" y="10" width="18" height="19" rx="5" fill="var(--bottle)" stroke="var(--ink)" stroke-width="1.5"/><rect x="2.75" y="21" width="16.5" height="7.25" rx="4" fill="var(--amber)"/><rect x="2.75" y="18" width="16.5" height="3.5" fill="var(--teal)"/></svg>
+      <div class="appname">Mehboob's <span>Signature Scent</span></div>
+    </div>
+    <div class="brand">
+      <h1 id="title">Mix formulas<small id="subtitle">50ml bottle ke liye gram ka hisaab</small></h1>
+      <div style="text-align:right"><div class="count" id="count"></div><div class="sync" id="sync" hidden>✓ Sheet se juda hua</div></div>
+    </div>
+  </header>
+
+  <section id="view-list">
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Naam ya note dhoondein, jaise oud, iris" aria-label="Dhoondein">
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter"></div>
+    <div id="results"></div>
+  </section>
+
+  <section id="view-custom" hidden>
+    <div class="form">
+      <div class="field"><label for="ca">Pehla perfume (A)</label><select id="ca"></select></div>
+      <div class="field"><label for="cb">Doosra perfume (B)</label><select id="cb"></select></div>
+      <div class="field">
+        <label for="cr">Ratio A : B</label>
+        <input id="cr" type="range" min="10" max="90" step="5" value="50">
+        <div class="rangeval"><span>B zyada</span><b id="crv">50 : 50</b><span>A zyada</span></div>
+      </div>
+      <div class="field">
+        <label for="cp">Oil %</label>
+        <input id="cp" type="range" min="15" max="35" step="1" value="30">
+        <div class="rangeval"><span>Halka</span><b id="cpv">30%</b><span>Tez</span></div>
+      </div>
+    </div>
+    <div id="custom-out"></div>
+  </section>
+</div>
+
+<button class="fab" id="fab" aria-label="Naya add karein">+</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<nav class="tabs" aria-label="Sections"><div class="in">
+  <button data-tab="perfumes" aria-current="page">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="8" width="12" height="13" rx="2"/><path d="M10 8V5h4v3M9 3h6"/></svg>Perfumes</button>
+  <button data-tab="mixes">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v4l-4 6v6a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-6l-4-6V3"/><path d="M6 14h12"/></svg>Mixes</button>
+  <button data-tab="custom">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h2M12 18h4"/></svg>Apna mix</button>
+</div></nav>
+
+<div class="overlay" id="ov"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title"><div class="in" id="sheet-in"></div></div>
+
+<script>
+function bottleSVG(a,b,sz,id){
+  const top=216.06, H=195.33, hA=a/sz*H, hB=b/sz*H, alc=H-hA-hB;
+  return `<svg class="bottle" viewBox="0 0 160.15 422.83" role="img" aria-label="Bottle mein oil aur alcohol ka hissa">
+    <defs><clipPath id="clip${id}"><path d="M10.02,216.06h139.75v175.09c0,11.17-9.07,20.24-20.24,20.24H30.26c-11.17,0-20.24-9.07-20.24-20.24v-175.09h0Z"/></clipPath></defs>
+    <path fill="var(--bottle)" stroke="#2e3b39" stroke-width="3" d="M38.11,146.16c-7.98,4.05-15.84,8.13-22.06,14.94-9.27,10.15-14.44,21.73-14.44,35.56,0,48.07-.06,148.37-.1,197.02-.01,15.27,12.36,27.65,27.63,27.65h101.89c15.26,0,27.64-12.37,27.63-27.64-.02-48.75-.06-149.43,0-198.02.01-10.81-3.62-20.35-9.63-28.94-6.72-9.61-16.27-16.09-26.99-20.36l-83.92-.2Z"/>
+    <path fill="#0b0f0e" stroke="#2e3b39" stroke-width="3" d="M104.11,66.66V18.66c-16.33,0-31.91,0-48,0v48"/>
+    <path fill="#0b0f0e" stroke="#2e3b39" stroke-width="3" d="M121.61,145.66c1.27-1.48,1-3.27,1-5,0-13.33-.14-26.67.07-40,.09-5.69-1.93-5.67-5.53-4.82-3.69.87-6.9-1.63-10.59-.3-3.47,1.25-7.26.58-10.97.2-3.46-.36-6.99-.07-10.49-.08-11.5-.02-23,.1-34.51-.34-3.08-.12-6.32.36-9.49.33-2.42-.03-3.54.96-3.53,3.51.06,14.67.03,29.33.02,44,0,.88.78,1.58.51,2.5"/>
+    <path fill="none" stroke="#2e3b39" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M80.11,31.16c-5.98.62-9.72,4.36-9.5,9.5.22,5.01,4.1,8.55,8.99,9.09,4.56.5,9.49-3.18,9.99-8.59.45-4.88-3.37-9.04-8.98-10"/>
+    <path fill="#0b0f0e" stroke="#2e3b39" stroke-width="3" d="M49.61,94.66c-.24-6.83.32-13.66-.43-20.51-.57-5.23,1.48-7.33,6.92-6.92,12.34.93,24.67.15,37.01.41,3.67.08,7.21.71,11.05-.27,4.52-1.15,7.47,2.24,6.87,7.28-.79,6.68-.16,13.34-.43,20.01"/>
+    <path fill="#141b1a" stroke="#2e3b39" stroke-width="3" d="M80.11,97.16v45.5"/>
+    <path fill="#141b1a" stroke="#2e3b39" stroke-width="3" d="M58.61,97.16c0,13.67-.03,27.33.04,41,0,1.49-.65,3.11.46,4.5"/>
+    <path fill="#141b1a" stroke="#2e3b39" stroke-width="3" d="M101.61,97.66v45"/>
+    <line fill="none" stroke="var(--spark)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" x1="140.19" y1="40.48" x2="158.07" y2="40.48"/>
+    <line fill="none" stroke="var(--spark)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" x1="2.15" y1="40.48" x2="20.04" y2="40.48"/>
+    <line fill="none" stroke="var(--spark)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" x1="132.14" y1="10.44" x2="147.63" y2="1.5"/>
+    <line fill="none" stroke="var(--spark)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" x1="12.59" y1="79.46" x2="28.08" y2="70.52"/>
+    <line fill="none" stroke="var(--spark)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" x1="132.14" y1="70.52" x2="147.63" y2="79.46"/>
+    <line fill="none" stroke="var(--spark)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" x1="12.59" y1="1.5" x2="28.08" y2="10.44"/>
+    <g clip-path="url(#clip${id})">
+      <rect class="layer" x="8" y="${top+alc}" width="144" height="${hB}" fill="var(--teal)"/>
+      <rect class="layer" x="8" y="${top+alc+hB}" width="144" height="${hA+6}" fill="var(--amber)"/>
+    </g>
+    <text x="80" y="${top+Math.max(alc/2,24)+6}" text-anchor="middle" font-size="18" font-weight="700" fill="var(--bottle-text)">${sz}ml</text>
+    <path fill="#fff" opacity=".2" d="M122.46,388.67c-2.74-4.67-5.05-9.65-6.95-13.9-7.42-16.66-13.59-34.44-18.86-54.37-.32-1.22-.7-2.45-1.07-3.64-1.16-3.74-2.35-7.61-1.81-11.42.48-3.34.79-6.98-.09-10.91-1.14-5.03-1.96-10.1-2.61-14.4-1.82-12-3.13-23.88-4.28-34.92-1.28-12.26-1.99-24.64-2.66-37.3,1.84-.14,3.7-.34,5.61-.56.5-.06.88-.49.88-.99v-60.58c0-.55-.45-1-1-1s-1,.45-1,1h-17c0-.55-.45-1-1-1s-1,.45-1,1v60.43c0,.47.33.88.79.98,2.14.47,4.21.72,6.26.84-.01.06-.04.11-.05.17-.57,7.62,0,15.31.56,22.74l.03.41c1.4,18.61,3.49,35.65,6.41,52.11.86,4.85,1.9,10.61,3.08,16.51l.04.2c.49,2.45,1.16,5.77,4.91,6.54-.16,3.71.95,7.28,2.02,10.75.36,1.17.74,2.38,1.05,3.56,5.3,20.03,11.5,37.92,18.97,54.68,1.92,4.31,4.26,9.35,7.05,14.1,1.94,3.31,2.25,5.95.98,8.55-.24.5-.04,1.1.46,1.34.14.07.29.1.44.1.37,0,.73-.21.9-.56,2.07-4.24.39-7.99-1.05-10.44Z"/>
+    <path fill="none" stroke="#2e3b39" stroke-width="3" d="M10.02,216.06h139.75v175.09c0,11.17-9.07,20.24-20.24,20.24H30.26c-11.17,0-20.24-9.07-20.24-20.24v-175.09h0Z"/>
+    <path fill="none" opacity=".1" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M44.34,157c-7.28,3.82-14.44,7.67-20.12,14.1-8.45,9.57-13.17,20.51-13.17,33.55"/>
+  </svg>`;
+}
+/* ---------- server bridge ---------- */
+const hasGAS=typeof google!=="undefined"&&google.script&&google.script.run;
+const API_URL="https://script.google.com/macros/s/AKfycbwznskjOS08J417rDil_90vr11BHSiSHh-hyxlb4jJTLMzL7vYGURUkkyBv6mOoJ-Fw8A/exec";
+function call(fn,...args){
+  if(hasGAS)return new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(rej)[fn](...args));
+  /* GitHub Pages: Apps Script JSON API (text/plain se CORS preflight nahi hota) */
+  const req=fn==="getData"
+    ? fetch(API_URL+"?fn=getData")
+    : fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn,args})});
+  return req.then(r=>r.json()).then(j=>{if(!j.ok)throw new Error(j.error||"Server error");return j.result});
+}
+
+/* ---------- local prefs ---------- */
+const LS="ss-gas-prefs";
+let PREF=(()=>{try{return Object.assign({size:50,custom:{a:"bdc",b:"narciso",r:50,p:30}},JSON.parse(localStorage.getItem(LS)||"{}"))}catch(e){return{size:50,custom:{a:"bdc",b:"narciso",r:50,p:30}}}})();
+const savePref=()=>{try{localStorage.setItem(LS,JSON.stringify(PREF))}catch(e){}};
+
+/* ---------- data ---------- */
+let P={}, M=[], loaded=false;
+function setData(d){
+  P={}; d.perfumes.forEach(p=>P[p.id]=p);
+  M=d.mixes.filter(m=>P[m.a]&&P[m.b]).map((m,i)=>Object.assign({},m,{no:i+1}));
+  loaded=true;
+}
+function load(){
+  return call("getData").then(d=>{setData(d);refresh()}).catch(err=>{
+    $("#results").innerHTML=`<div class="empty">Data load nahi hua: ${esc(err.message||err)}<br><button class="chip" id="retry">Dobara koshish karein</button></div>`;
+  });
+}
+function serverWrite(fn,args,okMsg){
+  setBusy(true);
+  return call(fn,...args).then(r=>{const d=r&&r.data?r.data:r;setData(d);refresh();if(okMsg)toast(okMsg);return r})
+    .catch(err=>{toast("Save nahi hua: "+(err.message||err));load()}).finally(()=>setBusy(false));
+}
+function setBusy(b){$("#sync").hidden=false;$("#sync").textContent=b?"Save ho raha hai…":"✓ Sheet se juda hua"}
+
+function refresh(){
+  if(tab==="custom")renderCustom();else{renderChips();renderList()}
+  if(current){
+    if(current.type==="mix"&&M.find(m=>m.id===current.id))openMix(current.id,$("#sheet").scrollTop||1);
+    else if(current.type==="p"&&P[current.id])openPerfume(current.id,true);
+  }
+}
+
+let tab="perfumes", filter="all", current=null;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=n=>{const r=Math.round(n*100)/100;return (r%1===0?r.toFixed(0):r.toFixed(2).replace(/0$/,""))};
+const tagCls=s=>"t-"+(String(s).startsWith("All")?"All":String(s).startsWith("Summer")?"Summer":"Winter");
+const dots=n=>{n=Math.max(1,Math.min(5,n||3));return '<span class="dots" aria-label="Intensity '+n+' of 5">'+"●".repeat(n)+'<span class="off">'+"●".repeat(5-n)+"</span></span>"};
+const calc=(ra,pct,sz)=>{const oil=sz*pct/100;const a=oil*ra/100;return{oil,a,b:oil-a,alc:sz-oil}};
+const itemOf=()=>current.type==="mix"?M.find(m=>m.id===current.id):P[current.id];
+
+/* ---------- list ---------- */
+function chipsFor(){
+  const base=[["all","Sab"],["Summer","Summer"],["Winter","Winter"],["All","All Season"]];
+  const extra=tab==="mixes"?[["soft","Soft"],["royal","Royal"]]:[];
+  return base.concat(extra,[["fav","★ Pasandeeda"],["bought",tab==="mixes"?"✓ Banwa liya":"✓ Khareed liya"],["notbought",tab==="mixes"?"Abhi nahi banwaya":"Abhi nahi khareeda"]]);
+}
+function renderChips(){$("#chips").innerHTML=chipsFor().map(([k,l])=>`<button class="chip" data-f="${k}" aria-pressed="${filter===k}">${l}</button>`).join("")}
+function passFilter(it,group){
+  if(filter==="all")return true;
+  if(filter==="fav")return it.fav;
+  if(filter==="bought")return it.bought;
+  if(filter==="notbought")return !it.bought;
+  if(filter==="soft"||filter==="royal")return group===filter;
+  return tagCls(it.s)==="t-"+filter;
+}
+const badges=it=>(it.fav?'<span class="fav" aria-label="Pasandeeda">★</span>':"")+(it.bought?'<span class="bought" aria-label="Khareed liya">✓</span>':"");
+function renderList(){
+  if(!loaded){$("#results").innerHTML='<div class="empty">Sheet se data aa raha hai…</div>';return}
+  const q=$("#q").value.trim().toLowerCase(); let html="";
+  const has=arr=>arr.join(" ").toLowerCase().includes(q);
+  if(tab==="mixes"){
+    const items=M.filter(m=>passFilter(m,m.g)&&(!q||has([m.n,m.d,P[m.a].n,P[m.b].n,P[m.a].t,P[m.a].h,P[m.a].ba,P[m.b].t,P[m.b].h,P[m.b].ba])));
+    $("#count").textContent=items.length+" mix";
+    [["soft","Soft Signature","office aur rozana"],["royal","Royal & Arabic","party aur shaadi"]].forEach(([g,t,s])=>{
+      const grp=items.filter(m=>m.g===g); if(!grp.length)return;
+      html+=`<h2 class="group-title">${t}<span>${s}</span></h2><div class="list">`+grp.map(m=>`
+        <button class="item" data-mix="${esc(m.id)}">
+          <span class="name"><span class="id">${m.no}</span>${esc(m.n)}${badges(m)}</span>
+          <span class="sub">${esc(P[m.a].n)} + ${esc(P[m.b].n)}</span>
+          <span class="right"><span class="ratio">${m.ra} : ${100-m.ra}</span><span class="tag ${tagCls(m.s)}">${esc(m.s)}</span></span>
+        </button>`).join("")+"</div>";
+    });
+  } else {
+    const items=Object.values(P).filter(p=>passFilter(p)&&(!q||has([p.n,p.b,p.t,p.h,p.ba,p.c])));
+    $("#count").textContent=items.length+" perfumes";
+    if(items.length) html='<div class="list" style="margin-top:6px">'+items.map(p=>`
+      <button class="item" data-p="${esc(p.id)}">
+        <span class="name">${esc(p.n)}${badges(p)}</span>
+        <span class="sub">${esc(p.b)}${p.c?" · "+esc(p.c):""}</span>
+        <span class="right"><span class="tag ${tagCls(p.s)}">${esc(p.s)}</span>${dots(p.i)}</span>
+      </button>`).join("")+"</div>";
+  }
+  if(!html){
+    const msg={fav:"Abhi koi pasandeeda nahi. Kisi item ko kholein aur ★ dabayein.",bought:"Abhi kuch mark nahi kiya. Item khol kar ✓ dabayein."}[filter]||"Is naam ya note se kuch nahi mila.";
+    html=`<div class="empty">${msg}<br><button class="chip" id="reset">Sab dikhayein</button></div>`;
+  }
+  $("#results").innerHTML=html;
+}
+
+/* ---------- detail ---------- */
+function mixPanel(aName,bName,ra,pct,id){
+  const c=calc(ra,pct,PREF.size);
+  return `<div class="mixer">
+    <div id="bottle">${bottleSVG(c.a,c.b,PREF.size,id)}</div>
+    <div>
+      <div class="sizes" role="group" aria-label="Bottle size">${[30,50,100].map(s=>`<button data-size="${s}" aria-pressed="${s===PREF.size}">${s}ml</button>`).join("")}</div>
+      <div class="row"><span class="lbl"><span class="sw" style="background:var(--amber)"></span>${esc(aName)}</span><span class="val">${fmt(c.a)}<small>g</small></span></div>
+      <div class="row"><span class="lbl"><span class="sw" style="background:var(--teal)"></span>${esc(bName)}</span><span class="val">${fmt(c.b)}<small>g</small></span></div>
+      <div class="row"><span class="lbl"><span class="sw" style="background:var(--bottle);border:1px solid var(--line)"></span>Alcohol</span><span class="val">${fmt(c.alc)}<small>ml</small></span></div>
+    </div>
+  </div>
+  <p class="note">Kul oil ${fmt(c.oil)} g (${pct}%), yaani takreeban ${fmt(c.oil/11.66)} tola. Pehle dono oils milayein, phir alcohol.</p>`;
+}
+function headBtns(it){
+  return `<div style="display:flex;gap:8px"><button class="iconbtn ${it.fav?"on":""}" id="favbtn" aria-pressed="${it.fav}" aria-label="Pasandeeda">★</button><button class="iconbtn ${it.bought?"ok":""}" id="buybtn" aria-pressed="${it.bought}" aria-label="Khareed liya">✓</button><button class="iconbtn" id="close" aria-label="Band karein">✕</button></div>`}
+function boughtBlock(it,label){
+  if(!it.bought) return "";
+  return `<div class="block ok-block"><h3>✓ ${label}${it.date?` <span class="muted">${esc(it.date)}</span>`:""}</h3>
+    <label class="mini" for="bnote">Note (dukan, qeemat, quality)</label>
+    <textarea id="bnote" rows="2" placeholder="Jaise: Shah Alam, Ali Perfumes, 1 tola Rs 1200">${esc(it.note)}</textarea></div>`}
+const actions=()=>`<div class="actions"><button class="btn" id="editbtn">Tabdeel karein</button><button class="btn danger" id="delbtn">Hatayein</button></div>`;
+
+function openMix(id,keep){
+  const m=M.find(x=>x.id===id); if(!m)return closeSheet(); current={type:"mix",id};
+  $("#sheet-in").innerHTML=`<div class="grab"></div>
+    <div class="sheet-head"><div><h2 id="sheet-title">${esc(m.n)}</h2><p class="lead">${esc(m.d)}</p></div>${headBtns(m)}</div>
+    ${mixPanel(P[m.a].n,P[m.b].n,m.ra,m.pct,"m")}
+    <div class="meta"><span class="tag ${tagCls(m.s)}">${esc(m.s)}</span>${m.o?`<span class="pill">${esc(m.o)}</span>`:""}<span class="pill">Ratio ${m.ra} : ${100-m.ra}</span><span class="pill">Intensity ${dots(m.i)}</span></div>
+    ${boughtBlock(m,"Banwa liya")}
+    ${m.tip?`<div class="block tip"><h3>Tip</h3><p>${esc(m.tip)}</p></div>`:""}
+    <div class="block"><h3>Is mix mein</h3><div class="links">
+      ${[m.a,m.b].map(k=>`<button class="linkbtn" data-p="${esc(k)}">${esc(P[k].n)}<span>${P[k].bought?"✓ khareeda hua · ":""}${esc(P[k].b)} ›</span></button>`).join("")}
+    </div></div>${actions()}`;
+  if(keep){$("#sheet").scrollTop=keep;return} showSheet();
+}
+function openPerfume(k,keep){
+  const p=P[k]; if(!p)return closeSheet(); current={type:"p",id:k};
+  const used=M.filter(m=>m.a===k||m.b===k), st=$("#sheet").scrollTop;
+  $("#sheet-in").innerHTML=`<div class="grab"></div>
+    <div class="sheet-head"><div><h2 id="sheet-title">${esc(p.n)}</h2><p class="lead">${esc(p.b)}${p.c?" · "+esc(p.c):""}</p></div>${headBtns(p)}</div>
+    <div class="pyramid">
+      <div class="tier"><b>Shuru ki khushbu</b>${esc(p.t)||"—"}</div>
+      <div class="tier"><b>Darmiyani</b>${esc(p.h)||"—"}</div>
+      <div class="tier"><b>Akhir tak rehti hai</b>${esc(p.ba)||"—"}</div>
+    </div>
+    <div class="meta"><span class="tag ${tagCls(p.s)}">${esc(p.s)}</span>${p.o?`<span class="pill">${esc(p.o)}</span>`:""}${p.q?`<span class="pill">Impression ${"★".repeat(p.q)}${"☆".repeat(Math.max(0,3-p.q))}</span>`:""}<span class="pill">Intensity ${dots(p.i)}</span></div>
+    ${boughtBlock(p,"Oil khareed liya")}
+    <div class="block"><h3>${used.length?"Is perfume ke mixes":"Abhi is ka koi mix nahi"}</h3>
+      ${used.length?`<div class="links">${used.map(m=>`<button class="linkbtn" data-mix="${esc(m.id)}">${esc(m.n)}<span>${esc(P[m.a===k?m.b:m.a].n)} ke saath ›</span></button>`).join("")}</div>`:`<p>"Apna mix" tab mein isay kisi bhi perfume ke saath mila kar dekhein.</p>`}
+    </div>${actions()}`;
+  if(keep){$("#sheet").scrollTop=st;return} showSheet();
+}
+function showSheet(){$("#ov").classList.add("open");$("#sheet").classList.add("open");$("#sheet").scrollTop=0;setTimeout(()=>{const c=$("#close");c&&c.focus({preventScroll:true})},50)}
+function closeSheet(){$("#ov").classList.remove("open");$("#sheet").classList.remove("open");current=null}
+
+const kindOf=()=>current.type==="mix"?"mix":"perfume";
+function toggle(field){
+  const it=itemOf(); if(!it)return; const v=!it[field];
+  it[field]=v; if(field==="bought")it.date=v?new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";
+  refresh(); serverWrite("setStatus",[kindOf(),current.id,field,v]);
+}
+function askDelete(btn){
+  if(!btn.dataset.sure){btn.dataset.sure="1";btn.textContent="Pakka hatana hai? Dobara dabayein";return}
+  const fn=current.type==="mix"?"deleteMix":"deletePerfume", id=current.id;
+  if(current.type==="p"){const n=M.filter(m=>m.a===id||m.b===id).length; if(n)toast(n+" mix bhi list se chhup jayenge")}
+  closeSheet(); serverWrite(fn,[id],"Hata diya");
+}
+
+/* ---------- forms ---------- */
+const seasons=["Summer","Winter","All Season"];
+const opt=(arr,v)=>arr.map(x=>`<option ${x===v?"selected":""}>${x}</option>`).join("");
+function perfumeForm(k){
+  const p=k?P[k]:{n:"",b:"",s:"All Season",t:"",h:"",ba:"",c:"",o:"",q:0,i:3,bought:false,date:"",note:"",fav:false};
+  current={type:"form-p",id:k||null};
+  $("#sheet-in").innerHTML=`<div class="grab"></div>
+    <div class="sheet-head"><div><h2 id="sheet-title">${k?"Perfume tabdeel karein":"Naya perfume"}</h2></div><button class="iconbtn" id="close" aria-label="Band karein">✕</button></div>
+    <form class="form" id="pform">
+      <div class="field"><label for="f-n">Naam *</label><input id="f-n" required value="${esc(p.n)}" placeholder="Jaise: Sauvage Elixir"></div>
+      <div class="field"><label for="f-b">Brand</label><input id="f-b" value="${esc(p.b)}" placeholder="Jaise: Dior"></div>
+      <div class="field"><label for="f-s">Season</label><select id="f-s">${opt(seasons,p.s)}</select></div>
+      <div class="field"><label for="f-t">Shuru ki khushbu (top notes)</label><input id="f-t" value="${esc(p.t)}"></div>
+      <div class="field"><label for="f-h">Darmiyani (heart notes)</label><input id="f-h" value="${esc(p.h)}"></div>
+      <div class="field"><label for="f-ba">Akhir ki khushbu (base notes)</label><input id="f-ba" value="${esc(p.ba)}"></div>
+      <div class="field"><label for="f-c">Khushbu kaisi hai</label><input id="f-c" value="${esc(p.c)}" placeholder="Jaise: fresh, woody"></div>
+      <div class="field"><label for="f-o">Kis mauqe ke liye</label><input id="f-o" value="${esc(p.o)}" placeholder="Jaise: Office, Party"></div>
+      <div class="field"><label for="f-i">Intensity: <b id="f-iv">${p.i||3}</b> / 5</label><input id="f-i" type="range" min="1" max="5" value="${p.i||3}"></div>
+      <button class="btn primary" type="submit">${k?"Tabdeeli save karein":"Perfume add karein"}</button>
+    </form>`;
+  showSheet();
+  $("#f-i").oninput=e=>$("#f-iv").textContent=e.target.value;
+  $("#pform").onsubmit=e=>{e.preventDefault();
+    const v=id=>$("#"+id).value.trim(); if(!v("f-n"))return;
+    const obj=Object.assign({},p,{id:k||"",n:v("f-n"),b:v("f-b"),s:v("f-s"),t:v("f-t"),h:v("f-h"),ba:v("f-ba"),c:v("f-c"),o:v("f-o"),i:+v("f-i")});
+    $("#pform button[type=submit]").disabled=true;
+    serverWrite("savePerfume",[obj],k?"Save ho gaya":"Perfume add ho gaya").then(r=>{if(r&&r.id)openPerfume(r.id)});
+  };
+}
+function mixForm(id,pre){
+  const keys=Object.keys(P);
+  const m=id?M.find(x=>x.id===id):Object.assign({n:"",d:"",a:keys[0],b:keys[1],ra:50,pct:30,s:"All Season",o:"",i:2,tip:"",g:"soft",bought:false,date:"",note:"",fav:false},pre||{});
+  current={type:"form-m",id:id||null};
+  const popts=v=>Object.values(P).map(p=>`<option value="${esc(p.id)}" ${p.id===v?"selected":""}>${esc(p.n)}</option>`).join("");
+  $("#sheet-in").innerHTML=`<div class="grab"></div>
+    <div class="sheet-head"><div><h2 id="sheet-title">${id?"Mix tabdeel karein":"Naya mix"}</h2></div><button class="iconbtn" id="close" aria-label="Band karein">✕</button></div>
+    <form class="form" id="mform">
+      <div class="field"><label for="g-n">Mix ka naam *</label><input id="g-n" required value="${esc(m.n)}" placeholder="Jaise: Morning Musk"></div>
+      <div class="field"><label for="g-d">Khushbu kaisi hai</label><input id="g-d" value="${esc(m.d)}"></div>
+      <div class="field"><label for="g-a">Perfume A</label><select id="g-a">${popts(m.a)}</select></div>
+      <div class="field"><label for="g-b">Perfume B</label><select id="g-b">${popts(m.b)}</select></div>
+      <div class="field"><label for="g-r">Ratio A : B</label><input id="g-r" type="range" min="10" max="90" step="5" value="${m.ra}"><div class="rangeval"><span>B zyada</span><b id="g-rv">${m.ra} : ${100-m.ra}</b><span>A zyada</span></div></div>
+      <div class="field"><label for="g-p">Oil %</label><input id="g-p" type="range" min="15" max="35" value="${m.pct}"><div class="rangeval"><span>Halka</span><b id="g-pv">${m.pct}%</b><span>Tez</span></div></div>
+      <div class="field"><label for="g-g">Hissa</label><select id="g-g"><option value="soft" ${m.g==="soft"?"selected":""}>Soft Signature (office)</option><option value="royal" ${m.g==="royal"?"selected":""}>Royal & Arabic (party)</option></select></div>
+      <div class="field"><label for="g-s">Season</label><select id="g-s">${opt(seasons,m.s)}</select></div>
+      <div class="field"><label for="g-o">Kis mauqe ke liye</label><input id="g-o" value="${esc(m.o)}"></div>
+      <div class="field"><label for="g-i">Intensity: <b id="g-iv">${m.i||2}</b> / 5</label><input id="g-i" type="range" min="1" max="5" value="${m.i||2}"></div>
+      <div class="field"><label for="g-t">Tip</label><input id="g-t" value="${esc(m.tip)}"></div>
+      <button class="btn primary" type="submit">${id?"Tabdeeli save karein":"Mix add karein"}</button>
+    </form>`;
+  showSheet();
+  $("#g-r").oninput=e=>$("#g-rv").textContent=e.target.value+" : "+(100-e.target.value);
+  $("#g-p").oninput=e=>$("#g-pv").textContent=e.target.value+"%";
+  $("#g-i").oninput=e=>$("#g-iv").textContent=e.target.value;
+  $("#mform").onsubmit=e=>{e.preventDefault();
+    const v=x=>$("#"+x).value.trim(); if(!v("g-n"))return;
+    if(v("g-a")===v("g-b")){toast("Dono perfume alag chunein");return}
+    const obj={id:id||"",n:v("g-n"),d:v("g-d"),a:v("g-a"),b:v("g-b"),ra:+v("g-r"),pct:+v("g-p"),g:v("g-g"),s:v("g-s"),o:v("g-o"),i:+v("g-i"),tip:v("g-t"),bought:!!m.bought,date:m.date||"",note:m.note||"",fav:!!m.fav};
+    $("#mform button[type=submit]").disabled=true;
+    serverWrite("saveMix",[obj],id?"Save ho gaya":"Mix add ho gaya").then(r=>{if(r&&r.id)openMix(r.id)});
+  };
+}
+function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),2200)}
+
+/* ---------- custom tab ---------- */
+function fillSelects(){
+  const opts=Object.values(P).map(p=>`<option value="${esc(p.id)}">${esc(p.n)}</option>`).join("");
+  $("#ca").innerHTML=opts; $("#cb").innerHTML=opts;
+  const c=PREF.custom, keys=Object.keys(P);
+  $("#ca").value=P[c.a]?c.a:keys[0]; $("#cb").value=P[c.b]?c.b:keys[1]; $("#cr").value=c.r; $("#cp").value=c.p;
+}
+function renderCustom(){
+  if(!loaded){$("#custom-out").innerHTML='<div class="empty">Sheet se data aa raha hai…</div>';return}
+  if($("#ca").options.length!==Object.keys(P).length)fillSelects();
+  const a=$("#ca").value,b=$("#cb").value,r=+$("#cr").value,p=+$("#cp").value;
+  PREF.custom={a,b,r,p}; savePref();
+  $("#crv").textContent=r+" : "+(100-r); $("#cpv").textContent=p+"%";
+  let warn="";
+  const strong=[a,b].filter(k=>(P[k].i||0)>=4).map(k=>P[k].n);
+  if(a===b) warn="Dono perfume aik hi hain. Mix ke liye alag perfume chunein.";
+  else if(strong.length&&p>25) warn=strong.join(" aur ")+" strong hai. Soft khushbu ke liye oil 25% ya kam rakhein.";
+  else if(p>30) warn="30% se zyada oil se khushbu tez ho jayegi.";
+  $("#custom-out").innerHTML=mixPanel(P[a].n,P[b].n,r,p,"c")+(warn?`<div class="block tip"><p>${esc(warn)}</p></div>`:"")+
+    (a!==b?`<button class="btn primary" id="savecustom" style="width:100%;margin-top:12px">Is mix ko list mein save karein</button>`:"");
+}
+
+/* ---------- tabs & events ---------- */
+function setTab(t){
+  tab=t; filter="all"; $("#q").value="";
+  document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.tab===t)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+  $("#view-list").hidden=t==="custom"; $("#view-custom").hidden=t!=="custom"; $("#fab").hidden=t==="custom";
+  $("#fab").setAttribute("aria-label",t==="mixes"?"Naya mix add karein":"Naya perfume add karein");
+  const titles={mixes:["Mix formulas","Mix chunein aur gram ka hisaab dekhein"],perfumes:["Perfumes","Har perfume ke notes aur us ke mixes"],custom:["Apna mix","Koi bhi do perfume, apna ratio"]};
+  $("#title").firstChild.textContent=titles[t][0]; $("#subtitle").textContent=titles[t][1];
+  if(t==="custom"){$("#count").textContent="";if(loaded)fillSelects();renderCustom()} else {renderChips();renderList()}
+  window.scrollTo(0,0);
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button"); if(!t)return;
+  if(t.type==="submit"&&t.closest("form"))return;
+  if(t.dataset.tab) return setTab(t.dataset.tab);
+  if(t.dataset.f){filter=t.dataset.f;renderChips();renderList();return}
+  if(t.id==="reset"){filter="all";$("#q").value="";renderChips();renderList();return}
+  if(t.id==="retry"){$("#results").innerHTML='<div class="empty">Sheet se data aa raha hai…</div>';return load()}
+  if(t.dataset.mix) return openMix(t.dataset.mix);
+  if(t.dataset.p) return openPerfume(t.dataset.p);
+  if(t.id==="close") return closeSheet();
+  if(t.id==="favbtn") return toggle("fav");
+  if(t.id==="buybtn") return toggle("bought");
+  if(t.id==="delbtn") return askDelete(t);
+  if(t.id==="editbtn") return current.type==="mix"?mixForm(current.id):perfumeForm(current.id);
+  if(t.id==="fab") return loaded&&(tab==="mixes"?mixForm():perfumeForm());
+  if(t.id==="savecustom"){const c=PREF.custom;return mixForm(null,{a:c.a,b:c.b,ra:c.r,pct:c.p})}
+  if(t.dataset.size){PREF.size=+t.dataset.size;savePref();
+    if(current&&current.type==="mix") openMix(current.id,$("#sheet").scrollTop||1); else if(tab==="custom") renderCustom(); return}
+});
+document.addEventListener("change",e=>{
+  if(e.target.id==="bnote"&&current){const it=itemOf();if(it){it.note=e.target.value;serverWrite("setStatus",[kindOf(),current.id,"note",e.target.value],"Note save ho gaya")}}
+});
+$("#ov").addEventListener("click",closeSheet);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&current)closeSheet()});
+$("#q").addEventListener("input",renderList);
+["ca","cb","cr","cp"].forEach(id=>$("#"+id).addEventListener("input",renderCustom));
+
+setTab("perfumes");
+load();
+
+if("serviceWorker" in navigator&&!hasGAS&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
+
+/* title page: tap/Enter se band, is session mein dobara nahi */
+(function(){
+  const s=$("#splash");
+  try{if(sessionStorage.getItem("ss-splash")){s.remove();return}}catch(e){}
+  const done=()=>{s.classList.add("gone");try{sessionStorage.setItem("ss-splash","1")}catch(e){}setTimeout(()=>s.remove(),600)};
+  s.addEventListener("click",done);
+  setTimeout(done,3500);
+})();
+
+</script>
+</body>
+</html>
