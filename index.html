@@ -59,8 +59,8 @@ h1 small{display:block;font-size:14px;font-weight:500;color:var(--muted);letter-
 .search{position:relative;flex:1;min-width:0}
 .search input{width:100%;height:48px;padding:0 12px 0 42px;border-radius:14px;border:1px solid var(--line);background:var(--bg);font-size:16px}
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.filterbar{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:3;background:var(--bg);margin:6px -16px 0;padding:10px 16px}
-.filterbar label{font-size:14px;font-weight:600;color:var(--muted)}
+.filterbar{display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:3;background:var(--bg);margin:6px -16px 0;padding:10px 16px}
+.filterbar .iconbtn{width:46px;height:46px;border-radius:14px;font-size:18px}
 .filterbar select{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:46px;padding:0 42px 0 14px;border-radius:14px;border:1px solid var(--line);font-size:16px;font-weight:600;cursor:pointer;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23B08A4A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 15px center}
 .chip{flex:none;border:1px solid var(--line);background:var(--surface);padding:9px 15px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -221,7 +221,7 @@ nav.tabs .in button[aria-current="page"] svg{animation:pop .4s cubic-bezier(.3,1
   </header>
 
   <section id="view-list">
-    <div class="filterbar"><select id="filter" aria-label="Filter"></select></div>
+    <div class="filterbar"><select id="filter" aria-label="Filter"></select><button class="iconbtn" id="ffav" aria-pressed="false" aria-label="Show favourites only">★</button><button class="iconbtn" id="fbought" aria-pressed="false" aria-label="Show bought only">✓</button></div>
     <div id="results"></div>
   </section>
 
@@ -338,7 +338,7 @@ function refresh(){
   }
 }
 
-let tab="perfumes", filter="all", current=null, animateList=false;
+let tab="perfumes", filter="all", favOnly=false, boughtOnly=false, current=null, animateList=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt=n=>{const r=Math.round(n*100)/100;return (r%1===0?r.toFixed(0):r.toFixed(2).replace(/0$/,""))};
@@ -351,10 +351,16 @@ const itemOf=()=>current.type==="mix"?M.find(m=>m.id===current.id):P[current.id]
 function chipsFor(){
   const base=[["all","All"],["Summer","Summer"],["Winter","Winter"],["All","All Season"]];
   const extra=tab==="mixes"?[["soft","Soft Signature"],["royal","Royal & Arabic"]]:[];
-  return base.concat(extra,[["fav","★ Favourites"],["bought",tab==="mixes"?"✓ Made":"✓ Bought"],["notbought",tab==="mixes"?"Not made yet":"Not bought yet"]]);
+  return base.concat(extra,[["notbought",tab==="mixes"?"Not made yet":"Not bought yet"]]);
 }
-function renderChips(){$("#filter").innerHTML=chipsFor().map(([k,l])=>`<option value="${k}" ${filter===k?"selected":""}>${l}</option>`).join("")}
+function renderChips(){
+  $("#ffav").classList.toggle("on",favOnly); $("#ffav").setAttribute("aria-pressed",favOnly);
+  $("#fbought").classList.toggle("ok",boughtOnly); $("#fbought").setAttribute("aria-pressed",boughtOnly);
+  $("#fbought").setAttribute("aria-label",tab==="mixes"?"Show made only":"Show bought only");
+  $("#filter").innerHTML=chipsFor().map(([k,l])=>`<option value="${k}" ${filter===k?"selected":""}>${l}</option>`).join("")}
 function passFilter(it,group){
+  if(favOnly&&!it.fav)return false;
+  if(boughtOnly&&!it.bought)return false;
   if(filter==="all")return true;
   if(filter==="fav")return it.fav;
   if(filter==="bought")return it.bought;
@@ -392,7 +398,7 @@ function renderList(){
       </button>`).join("")+"</div>";
   }
   if(!html){
-    const msg={fav:"No favourites yet. Open an item and tap ★.",bought:"Nothing marked yet. Open an item and tap ✓."}[filter]||"Nothing found for this name or note.";
+    const msg={fav:"No favourites yet. Open an item and tap ★.",bought:"Nothing marked yet. Open an item and tap ✓."}[favOnly?"fav":boughtOnly?"bought":""]||"Nothing found for this name or note.";
     html=`<div class="empty">${msg}<br><button class="chip" id="reset">Show all</button></div>`;
   }
   $("#results").classList.toggle("stagger",animateList); animateList=false;
@@ -556,7 +562,7 @@ function renderCustom(){
 
 /* ---------- tabs & events ---------- */
 function setTab(t){
-  tab=t; filter="all"; $("#q").value=""; animateList=loaded;
+  tab=t; filter="all"; favOnly=boughtOnly=false; $("#q").value=""; animateList=loaded;
   const br=$(".brand"); br.classList.remove("swap"); void br.offsetWidth; br.classList.add("swap");
   document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.tab===t)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
   $("#view-list").hidden=t==="custom"; $("#view-custom").hidden=t!=="custom"; $("#dockrow").hidden=t==="custom";
@@ -570,7 +576,8 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("button"); if(!t)return;
   if(t.type==="submit"&&t.closest("form"))return;
   if(t.dataset.tab) return setTab(t.dataset.tab);
-  if(t.id==="reset"){filter="all";$("#q").value="";renderChips();renderList();return}
+  if(t.id==="reset"){filter="all";favOnly=boughtOnly=false;$("#q").value="";renderChips();renderList();return}
+  if(t.id==="ffav"||t.id==="fbought"){if(t.id==="ffav")favOnly=!favOnly;else boughtOnly=!boughtOnly;animateList=true;renderChips();renderList();return}
   if(t.id==="retry"){$("#results").innerHTML='<div class="empty">Loading data from Sheet…</div>';return load()}
   if(t.dataset.mix) return openMix(t.dataset.mix);
   if(t.dataset.p) return openPerfume(t.dataset.p);
