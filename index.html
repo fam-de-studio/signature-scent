@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ur-Latn">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
@@ -59,8 +59,9 @@ h1 small{display:block;font-size:14px;font-weight:500;color:var(--muted);letter-
 .search{position:relative;flex:1;min-width:0}
 .search input{width:100%;height:48px;padding:0 12px 0 42px;border-radius:14px;border:1px solid var(--line);background:var(--bg);font-size:16px}
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.chips{display:flex;gap:8px;overflow-x:auto;position:sticky;top:0;z-index:3;background:var(--bg);margin:6px -16px 0;padding:10px 16px;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
+.filterbar{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:3;background:var(--bg);margin:6px -16px 0;padding:10px 16px}
+.filterbar label{font-size:14px;font-weight:600;color:var(--muted)}
+.filterbar select{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:46px;padding:0 42px 0 14px;border-radius:14px;border:1px solid var(--line);font-size:16px;font-weight:600;cursor:pointer;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23B08A4A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 15px center}
 .chip{flex:none;border:1px solid var(--line);background:var(--surface);padding:9px 15px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
@@ -201,11 +202,11 @@ nav.tabs .in button[aria-current="page"] svg{animation:pop .4s cubic-bezier(.3,1
 </style>
 </head>
 <body>
-<button class="splash" id="splash" aria-label="App kholein">
+<button class="splash" id="splash" aria-label="Open app">
   <span class="eyebrow">Attar · Oud · Perfume</span>
   <span class="stitle">Mehboob's <span>Signature Scent</span></span>
-  <span class="stag">Apni khushbu, apna formula</span>
-  <span class="enter">Shuru karein</span>
+  <span class="stag">Your scent, your formula</span>
+  <span class="enter">Get started</span>
 </button>
 <div class="wrap">
   <header class="top">
@@ -214,29 +215,29 @@ nav.tabs .in button[aria-current="page"] svg{animation:pop .4s cubic-bezier(.3,1
       <div class="appname">Mehboob's <span>Signature Scent</span></div>
     </div>
     <div class="brand">
-      <h1 id="title">Mix formulas<small id="subtitle">50ml bottle ke liye gram ka hisaab</small></h1>
-      <div style="text-align:right"><div class="count" id="count"></div><div class="sync" id="sync" hidden>✓ Sheet se juda hua</div></div>
+      <h1 id="title">Mix formulas<small id="subtitle">Choose a mix and see the grams</small></h1>
+      <div style="text-align:right"><div class="count" id="count"></div><div class="sync" id="sync" hidden>✓ Synced with Sheet</div></div>
     </div>
   </header>
 
   <section id="view-list">
-    <div class="chips" id="chips" role="group" aria-label="Filter"></div>
+    <div class="filterbar"><label for="filter">Show</label><select id="filter"></select></div>
     <div id="results"></div>
   </section>
 
   <section id="view-custom" hidden>
     <div class="form">
-      <div class="field"><label for="ca">Pehla perfume (A)</label><select id="ca"></select></div>
-      <div class="field"><label for="cb">Doosra perfume (B)</label><select id="cb"></select></div>
+      <div class="field"><label for="ca">First perfume (A)</label><select id="ca"></select></div>
+      <div class="field"><label for="cb">Second perfume (B)</label><select id="cb"></select></div>
       <div class="field">
         <label for="cr">Ratio A : B</label>
         <input id="cr" type="range" min="10" max="90" step="5" value="50">
-        <div class="rangeval"><span>B zyada</span><b id="crv">50 : 50</b><span>A zyada</span></div>
+        <div class="rangeval"><span>More B</span><b id="crv">50 : 50</b><span>More A</span></div>
       </div>
       <div class="field">
         <label for="cp">Oil %</label>
         <input id="cp" type="range" min="15" max="35" step="1" value="30">
-        <div class="rangeval"><span>Halka</span><b id="cpv">30%</b><span>Tez</span></div>
+        <div class="rangeval"><span>Light</span><b id="cpv">30%</b><span>Strong</span></div>
       </div>
     </div>
     <div id="custom-out"></div>
@@ -248,9 +249,9 @@ nav.tabs .in button[aria-current="page"] svg{animation:pop .4s cubic-bezier(.3,1
 <div class="dockrow" id="dockrow">
   <div class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="q" type="search" enterkeyhint="search" placeholder="Naam ya note dhoondein" aria-label="Dhoondein">
+    <input id="q" type="search" enterkeyhint="search" placeholder="Search name or note" aria-label="Search">
   </div>
-  <button class="fab" id="fab" aria-label="Naya add karein">+</button>
+  <button class="fab" id="fab" aria-label="Add new">+</button>
 </div>
 <div class="in">
   <button data-tab="perfumes" aria-current="page">
@@ -258,7 +259,7 @@ nav.tabs .in button[aria-current="page"] svg{animation:pop .4s cubic-bezier(.3,1
   <button data-tab="mixes">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v4l-4 6v6a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-6l-4-6V3"/><path d="M6 14h12"/></svg>Mixes</button>
   <button data-tab="custom">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h2M12 18h4"/></svg>Apna mix</button>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h2M12 18h4"/></svg>My mix</button>
 </div></nav>
 
 <div class="overlay" id="ov"></div>
@@ -267,7 +268,7 @@ nav.tabs .in button[aria-current="page"] svg{animation:pop .4s cubic-bezier(.3,1
 <script>
 function bottleSVG(a,b,sz,id){
   const top=216.06, H=195.33, hA=a/sz*H, hB=b/sz*H, alc=H-hA-hB;
-  return `<svg class="bottle" viewBox="0 0 160.15 422.83" role="img" aria-label="Bottle mein oil aur alcohol ka hissa">
+  return `<svg class="bottle" viewBox="0 0 160.15 422.83" role="img" aria-label="Oil and alcohol share in the bottle">
     <defs><clipPath id="clip${id}"><path d="M10.02,216.06h139.75v175.09c0,11.17-9.07,20.24-20.24,20.24H30.26c-11.17,0-20.24-9.07-20.24-20.24v-175.09h0Z"/></clipPath></defs>
     <path fill="var(--bottle)" stroke="#2e3b39" stroke-width="3" d="M38.11,146.16c-7.98,4.05-15.84,8.13-22.06,14.94-9.27,10.15-14.44,21.73-14.44,35.56,0,48.07-.06,148.37-.1,197.02-.01,15.27,12.36,27.65,27.63,27.65h101.89c15.26,0,27.64-12.37,27.63-27.64-.02-48.75-.06-149.43,0-198.02.01-10.81-3.62-20.35-9.63-28.94-6.72-9.61-16.27-16.09-26.99-20.36l-83.92-.2Z"/>
     <path fill="#0b0f0e" stroke="#2e3b39" stroke-width="3" d="M104.11,66.66V18.66c-16.33,0-31.91,0-48,0v48"/>
@@ -298,7 +299,7 @@ const hasGAS=typeof google!=="undefined"&&google.script&&google.script.run;
 const API_URL="https://script.google.com/macros/s/AKfycbwznskjOS08J417rDil_90vr11BHSiSHh-hyxlb4jJTLMzL7vYGURUkkyBv6mOoJ-Fw8A/exec";
 function call(fn,...args){
   if(hasGAS)return new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(rej)[fn](...args));
-  /* GitHub Pages: Apps Script JSON API (text/plain se CORS preflight nahi hota) */
+  /* GitHub Pages: Apps Script JSON API (text/plain avoids a CORS preflight) */
   const req=fn==="getData"
     ? fetch(API_URL+"?fn=getData")
     : fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn,args})});
@@ -319,15 +320,15 @@ function setData(d){
 }
 function load(){
   return call("getData").then(d=>{animateList=!loaded;setData(d);refresh()}).catch(err=>{
-    $("#results").innerHTML=`<div class="empty">Data load nahi hua: ${esc(err.message||err)}<br><button class="chip" id="retry">Dobara koshish karein</button></div>`;
+    $("#results").innerHTML=`<div class="empty">Could not load data: ${esc(err.message||err)}<br><button class="chip" id="retry">Try again</button></div>`;
   });
 }
 function serverWrite(fn,args,okMsg){
   setBusy(true);
   return call(fn,...args).then(r=>{const d=r&&r.data?r.data:r;setData(d);refresh();if(okMsg)toast(okMsg);return r})
-    .catch(err=>{toast("Save nahi hua: "+(err.message||err));load()}).finally(()=>setBusy(false));
+    .catch(err=>{toast("Could not save: "+(err.message||err));load()}).finally(()=>setBusy(false));
 }
-function setBusy(b){$("#sync").hidden=false;$("#sync").textContent=b?"Save ho raha hai…":"✓ Sheet se juda hua"}
+function setBusy(b){$("#sync").hidden=false;$("#sync").textContent=b?"Saving…":"✓ Synced with Sheet"}
 
 function refresh(){
   if(tab==="custom")renderCustom();else{renderChips();renderList()}
@@ -348,11 +349,11 @@ const itemOf=()=>current.type==="mix"?M.find(m=>m.id===current.id):P[current.id]
 
 /* ---------- list ---------- */
 function chipsFor(){
-  const base=[["all","Sab"],["Summer","Summer"],["Winter","Winter"],["All","All Season"]];
-  const extra=tab==="mixes"?[["soft","Soft"],["royal","Royal"]]:[];
-  return base.concat(extra,[["fav","★ Pasandeeda"],["bought",tab==="mixes"?"✓ Banwa liya":"✓ Khareed liya"],["notbought",tab==="mixes"?"Abhi nahi banwaya":"Abhi nahi khareeda"]]);
+  const base=[["all","All"],["Summer","Summer"],["Winter","Winter"],["All","All Season"]];
+  const extra=tab==="mixes"?[["soft","Soft Signature"],["royal","Royal & Arabic"]]:[];
+  return base.concat(extra,[["fav","★ Favourites"],["bought",tab==="mixes"?"✓ Made":"✓ Bought"],["notbought",tab==="mixes"?"Not made yet":"Not bought yet"]]);
 }
-function renderChips(){$("#chips").innerHTML=chipsFor().map(([k,l])=>`<button class="chip" data-f="${k}" aria-pressed="${filter===k}">${l}</button>`).join("")}
+function renderChips(){$("#filter").innerHTML=chipsFor().map(([k,l])=>`<option value="${k}" ${filter===k?"selected":""}>${l}</option>`).join("")}
 function passFilter(it,group){
   if(filter==="all")return true;
   if(filter==="fav")return it.fav;
@@ -361,15 +362,15 @@ function passFilter(it,group){
   if(filter==="soft"||filter==="royal")return group===filter;
   return tagCls(it.s)==="t-"+filter;
 }
-const badges=it=>(it.fav?'<span class="fav" aria-label="Pasandeeda">★</span>':"")+(it.bought?'<span class="bought" aria-label="Khareed liya">✓</span>':"");
+const badges=it=>(it.fav?'<span class="fav" aria-label="Favourite">★</span>':"")+(it.bought?'<span class="bought" aria-label="Bought">✓</span>':"");
 function renderList(){
-  if(!loaded){$("#results").innerHTML='<div class="empty">Sheet se data aa raha hai…</div>';return}
+  if(!loaded){$("#results").innerHTML='<div class="empty">Loading data from Sheet…</div>';return}
   const q=$("#q").value.trim().toLowerCase(); let html="";
   const has=arr=>arr.join(" ").toLowerCase().includes(q);
   if(tab==="mixes"){
     const items=M.filter(m=>passFilter(m,m.g)&&(!q||has([m.n,m.d,P[m.a].n,P[m.b].n,P[m.a].t,P[m.a].h,P[m.a].ba,P[m.b].t,P[m.b].h,P[m.b].ba])));
-    $("#count").textContent=items.length+" mix";
-    [["soft","Soft Signature","office aur rozana"],["royal","Royal & Arabic","party aur shaadi"]].forEach(([g,t,s])=>{
+    $("#count").textContent=items.length+" mixes";
+    [["soft","Soft Signature","office and daily"],["royal","Royal & Arabic","party and wedding"]].forEach(([g,t,s])=>{
       const grp=items.filter(m=>m.g===g); if(!grp.length)return;
       html+=`<h2 class="group-title">${t}<span>${s}</span></h2><div class="list">`+grp.map((m,i)=>`
         <button class="item" style="--i:${Math.min(i,10)}" data-mix="${esc(m.id)}">
@@ -391,8 +392,8 @@ function renderList(){
       </button>`).join("")+"</div>";
   }
   if(!html){
-    const msg={fav:"Abhi koi pasandeeda nahi. Kisi item ko kholein aur ★ dabayein.",bought:"Abhi kuch mark nahi kiya. Item khol kar ✓ dabayein."}[filter]||"Is naam ya note se kuch nahi mila.";
-    html=`<div class="empty">${msg}<br><button class="chip" id="reset">Sab dikhayein</button></div>`;
+    const msg={fav:"No favourites yet. Open an item and tap ★.",bought:"Nothing marked yet. Open an item and tap ✓."}[filter]||"Nothing found for this name or note.";
+    html=`<div class="empty">${msg}<br><button class="chip" id="reset">Show all</button></div>`;
   }
   $("#results").classList.toggle("stagger",animateList); animateList=false;
   $("#results").innerHTML=html;
@@ -410,16 +411,16 @@ function mixPanel(aName,bName,ra,pct,id){
       <div class="row"><span class="lbl"><span class="sw" style="background:var(--bottle);border:1px solid var(--line)"></span>Alcohol</span><span class="val">${fmt(c.alc)}<small>ml</small></span></div>
     </div>
   </div>
-  <p class="note">Kul oil ${fmt(c.oil)} g (${pct}%), yaani takreeban ${fmt(c.oil/11.66)} tola. Pehle dono oils milayein, phir alcohol.</p>`;
+  <p class="note">Total oil ${fmt(c.oil)} g (${pct}%), about ${fmt(c.oil/11.66)} tola. Mix both oils first, then add alcohol.</p>`;
 }
 function headBtns(it){
-  return `<div style="display:flex;gap:8px"><button class="iconbtn ${it.fav?"on":""}" id="favbtn" aria-pressed="${it.fav}" aria-label="Pasandeeda">★</button><button class="iconbtn ${it.bought?"ok":""}" id="buybtn" aria-pressed="${it.bought}" aria-label="Khareed liya">✓</button><button class="iconbtn" id="close" aria-label="Band karein">✕</button></div>`}
+  return `<div style="display:flex;gap:8px"><button class="iconbtn ${it.fav?"on":""}" id="favbtn" aria-pressed="${it.fav}" aria-label="Favourite">★</button><button class="iconbtn ${it.bought?"ok":""}" id="buybtn" aria-pressed="${it.bought}" aria-label="Bought">✓</button><button class="iconbtn" id="close" aria-label="Close">✕</button></div>`}
 function boughtBlock(it,label){
   if(!it.bought) return "";
   return `<div class="block ok-block"><h3>✓ ${label}${it.date?` <span class="muted">${esc(it.date)}</span>`:""}</h3>
-    <label class="mini" for="bnote">Note (dukan, qeemat, quality)</label>
-    <textarea id="bnote" rows="2" placeholder="Jaise: Shah Alam, Ali Perfumes, 1 tola Rs 1200">${esc(it.note)}</textarea></div>`}
-const actions=()=>`<div class="actions"><button class="btn" id="editbtn">Tabdeel karein</button><button class="btn danger" id="delbtn">Hatayein</button></div>`;
+    <label class="mini" for="bnote">Note (shop, price, quality)</label>
+    <textarea id="bnote" rows="2" placeholder="e.g. Shah Alam, Ali Perfumes, 1 tola Rs 1200">${esc(it.note)}</textarea></div>`}
+const actions=()=>`<div class="actions"><button class="btn" id="editbtn">Edit</button><button class="btn danger" id="delbtn">Delete</button></div>`;
 
 function openMix(id,keep){
   const m=M.find(x=>x.id===id); if(!m)return closeSheet(); current={type:"mix",id};
@@ -427,10 +428,10 @@ function openMix(id,keep){
     <div class="sheet-head"><div><h2 id="sheet-title">${esc(m.n)}</h2><p class="lead">${esc(m.d)}</p></div>${headBtns(m)}</div>
     ${mixPanel(P[m.a].n,P[m.b].n,m.ra,m.pct,"m")}
     <div class="meta"><span class="tag ${tagCls(m.s)}">${esc(m.s)}</span>${m.o?`<span class="pill">${esc(m.o)}</span>`:""}<span class="pill">Ratio ${m.ra} : ${100-m.ra}</span><span class="pill">Intensity ${dots(m.i)}</span></div>
-    ${boughtBlock(m,"Banwa liya")}
+    ${boughtBlock(m,"Made")}
     ${m.tip?`<div class="block tip"><h3>Tip</h3><p>${esc(m.tip)}</p></div>`:""}
-    <div class="block"><h3>Is mix mein</h3><div class="links">
-      ${[m.a,m.b].map(k=>`<button class="linkbtn" data-p="${esc(k)}">${esc(P[k].n)}<span>${P[k].bought?"✓ khareeda hua · ":""}${esc(P[k].b)} ›</span></button>`).join("")}
+    <div class="block"><h3>In this mix</h3><div class="links">
+      ${[m.a,m.b].map(k=>`<button class="linkbtn" data-p="${esc(k)}">${esc(P[k].n)}<span>${P[k].bought?"✓ bought · ":""}${esc(P[k].b)} ›</span></button>`).join("")}
     </div></div>${actions()}`;
   if(keep){$("#sheet").scrollTop=keep;return} showSheet();
 }
@@ -440,14 +441,14 @@ function openPerfume(k,keep){
   $("#sheet-in").innerHTML=`<div class="grab"></div>
     <div class="sheet-head"><div><h2 id="sheet-title">${esc(p.n)}</h2><p class="lead">${esc(p.b)}${p.c?" · "+esc(p.c):""}</p></div>${headBtns(p)}</div>
     <div class="pyramid">
-      <div class="tier"><b>Shuru ki khushbu</b>${esc(p.t)||"—"}</div>
-      <div class="tier"><b>Darmiyani</b>${esc(p.h)||"—"}</div>
-      <div class="tier"><b>Akhir tak rehti hai</b>${esc(p.ba)||"—"}</div>
+      <div class="tier"><b>Top notes</b>${esc(p.t)||"—"}</div>
+      <div class="tier"><b>Heart notes</b>${esc(p.h)||"—"}</div>
+      <div class="tier"><b>Base notes</b>${esc(p.ba)||"—"}</div>
     </div>
     <div class="meta"><span class="tag ${tagCls(p.s)}">${esc(p.s)}</span>${p.o?`<span class="pill">${esc(p.o)}</span>`:""}${p.q?`<span class="pill">Impression ${"★".repeat(p.q)}${"☆".repeat(Math.max(0,3-p.q))}</span>`:""}<span class="pill">Intensity ${dots(p.i)}</span></div>
-    ${boughtBlock(p,"Oil khareed liya")}
-    <div class="block"><h3>${used.length?"Is perfume ke mixes":"Abhi is ka koi mix nahi"}</h3>
-      ${used.length?`<div class="links">${used.map(m=>`<button class="linkbtn" data-mix="${esc(m.id)}">${esc(m.n)}<span>${esc(P[m.a===k?m.b:m.a].n)} ke saath ›</span></button>`).join("")}</div>`:`<p>"Apna mix" tab mein isay kisi bhi perfume ke saath mila kar dekhein.</p>`}
+    ${boughtBlock(p,"Oil bought")}
+    <div class="block"><h3>${used.length?"Mixes with this perfume":"No mixes with this perfume yet"}</h3>
+      ${used.length?`<div class="links">${used.map(m=>`<button class="linkbtn" data-mix="${esc(m.id)}">${esc(m.n)}<span>with ${esc(P[m.a===k?m.b:m.a].n)} ›</span></button>`).join("")}</div>`:`<p>Try it with any perfume in the "My mix" tab.</p>`}
     </div>${actions()}`;
   if(keep){$("#sheet").scrollTop=st;return} showSheet();
 }
@@ -461,10 +462,10 @@ function toggle(field){
   refresh(); serverWrite("setStatus",[kindOf(),current.id,field,v]);
 }
 function askDelete(btn){
-  if(!btn.dataset.sure){btn.dataset.sure="1";btn.textContent="Pakka hatana hai? Dobara dabayein";return}
+  if(!btn.dataset.sure){btn.dataset.sure="1";btn.textContent="Sure? Tap again to delete";return}
   const fn=current.type==="mix"?"deleteMix":"deletePerfume", id=current.id;
-  if(current.type==="p"){const n=M.filter(m=>m.a===id||m.b===id).length; if(n)toast(n+" mix bhi list se chhup jayenge")}
-  closeSheet(); serverWrite(fn,[id],"Hata diya");
+  if(current.type==="p"){const n=M.filter(m=>m.a===id||m.b===id).length; if(n)toast(n+" mixes will also be hidden")}
+  closeSheet(); serverWrite(fn,[id],"Deleted");
 }
 
 /* ---------- forms ---------- */
@@ -474,18 +475,18 @@ function perfumeForm(k){
   const p=k?P[k]:{n:"",b:"",s:"All Season",t:"",h:"",ba:"",c:"",o:"",q:0,i:3,bought:false,date:"",note:"",fav:false};
   current={type:"form-p",id:k||null};
   $("#sheet-in").innerHTML=`<div class="grab"></div>
-    <div class="sheet-head"><div><h2 id="sheet-title">${k?"Perfume tabdeel karein":"Naya perfume"}</h2></div><button class="iconbtn" id="close" aria-label="Band karein">✕</button></div>
+    <div class="sheet-head"><div><h2 id="sheet-title">${k?"Edit perfume":"New perfume"}</h2></div><button class="iconbtn" id="close" aria-label="Close">✕</button></div>
     <form class="form" id="pform">
-      <div class="field"><label for="f-n">Naam *</label><input id="f-n" required value="${esc(p.n)}" placeholder="Jaise: Sauvage Elixir"></div>
-      <div class="field"><label for="f-b">Brand</label><input id="f-b" value="${esc(p.b)}" placeholder="Jaise: Dior"></div>
+      <div class="field"><label for="f-n">Name *</label><input id="f-n" required value="${esc(p.n)}" placeholder="e.g. Sauvage Elixir"></div>
+      <div class="field"><label for="f-b">Brand</label><input id="f-b" value="${esc(p.b)}" placeholder="e.g. Dior"></div>
       <div class="field"><label for="f-s">Season</label><select id="f-s">${opt(seasons,p.s)}</select></div>
-      <div class="field"><label for="f-t">Shuru ki khushbu (top notes)</label><input id="f-t" value="${esc(p.t)}"></div>
-      <div class="field"><label for="f-h">Darmiyani (heart notes)</label><input id="f-h" value="${esc(p.h)}"></div>
-      <div class="field"><label for="f-ba">Akhir ki khushbu (base notes)</label><input id="f-ba" value="${esc(p.ba)}"></div>
-      <div class="field"><label for="f-c">Khushbu kaisi hai</label><input id="f-c" value="${esc(p.c)}" placeholder="Jaise: fresh, woody"></div>
-      <div class="field"><label for="f-o">Kis mauqe ke liye</label><input id="f-o" value="${esc(p.o)}" placeholder="Jaise: Office, Party"></div>
+      <div class="field"><label for="f-t">Top notes</label><input id="f-t" value="${esc(p.t)}"></div>
+      <div class="field"><label for="f-h">Heart notes</label><input id="f-h" value="${esc(p.h)}"></div>
+      <div class="field"><label for="f-ba">Base notes</label><input id="f-ba" value="${esc(p.ba)}"></div>
+      <div class="field"><label for="f-c">Scent style</label><input id="f-c" value="${esc(p.c)}" placeholder="e.g. fresh, woody"></div>
+      <div class="field"><label for="f-o">Occasion</label><input id="f-o" value="${esc(p.o)}" placeholder="e.g. Office, Party"></div>
       <div class="field"><label for="f-i">Intensity: <b id="f-iv">${p.i||3}</b> / 5</label><input id="f-i" type="range" min="1" max="5" value="${p.i||3}"></div>
-      <button class="btn primary" type="submit">${k?"Tabdeeli save karein":"Perfume add karein"}</button>
+      <button class="btn primary" type="submit">${k?"Save changes":"Add perfume"}</button>
     </form>`;
   showSheet();
   $("#f-i").oninput=e=>$("#f-iv").textContent=e.target.value;
@@ -493,7 +494,7 @@ function perfumeForm(k){
     const v=id=>$("#"+id).value.trim(); if(!v("f-n"))return;
     const obj=Object.assign({},p,{id:k||"",n:v("f-n"),b:v("f-b"),s:v("f-s"),t:v("f-t"),h:v("f-h"),ba:v("f-ba"),c:v("f-c"),o:v("f-o"),i:+v("f-i")});
     $("#pform button[type=submit]").disabled=true;
-    serverWrite("savePerfume",[obj],k?"Save ho gaya":"Perfume add ho gaya").then(r=>{if(r&&r.id)openPerfume(r.id)});
+    serverWrite("savePerfume",[obj],k?"Saved":"Perfume added").then(r=>{if(r&&r.id)openPerfume(r.id)});
   };
 }
 function mixForm(id,pre){
@@ -502,20 +503,20 @@ function mixForm(id,pre){
   current={type:"form-m",id:id||null};
   const popts=v=>Object.values(P).map(p=>`<option value="${esc(p.id)}" ${p.id===v?"selected":""}>${esc(p.n)}</option>`).join("");
   $("#sheet-in").innerHTML=`<div class="grab"></div>
-    <div class="sheet-head"><div><h2 id="sheet-title">${id?"Mix tabdeel karein":"Naya mix"}</h2></div><button class="iconbtn" id="close" aria-label="Band karein">✕</button></div>
+    <div class="sheet-head"><div><h2 id="sheet-title">${id?"Edit mix":"New mix"}</h2></div><button class="iconbtn" id="close" aria-label="Close">✕</button></div>
     <form class="form" id="mform">
-      <div class="field"><label for="g-n">Mix ka naam *</label><input id="g-n" required value="${esc(m.n)}" placeholder="Jaise: Morning Musk"></div>
-      <div class="field"><label for="g-d">Khushbu kaisi hai</label><input id="g-d" value="${esc(m.d)}"></div>
+      <div class="field"><label for="g-n">Mix name *</label><input id="g-n" required value="${esc(m.n)}" placeholder="e.g. Morning Musk"></div>
+      <div class="field"><label for="g-d">Scent style</label><input id="g-d" value="${esc(m.d)}"></div>
       <div class="field"><label for="g-a">Perfume A</label><select id="g-a">${popts(m.a)}</select></div>
       <div class="field"><label for="g-b">Perfume B</label><select id="g-b">${popts(m.b)}</select></div>
-      <div class="field"><label for="g-r">Ratio A : B</label><input id="g-r" type="range" min="10" max="90" step="5" value="${m.ra}"><div class="rangeval"><span>B zyada</span><b id="g-rv">${m.ra} : ${100-m.ra}</b><span>A zyada</span></div></div>
-      <div class="field"><label for="g-p">Oil %</label><input id="g-p" type="range" min="15" max="35" value="${m.pct}"><div class="rangeval"><span>Halka</span><b id="g-pv">${m.pct}%</b><span>Tez</span></div></div>
-      <div class="field"><label for="g-g">Hissa</label><select id="g-g"><option value="soft" ${m.g==="soft"?"selected":""}>Soft Signature (office)</option><option value="royal" ${m.g==="royal"?"selected":""}>Royal & Arabic (party)</option></select></div>
+      <div class="field"><label for="g-r">Ratio A : B</label><input id="g-r" type="range" min="10" max="90" step="5" value="${m.ra}"><div class="rangeval"><span>More B</span><b id="g-rv">${m.ra} : ${100-m.ra}</b><span>More A</span></div></div>
+      <div class="field"><label for="g-p">Oil %</label><input id="g-p" type="range" min="15" max="35" value="${m.pct}"><div class="rangeval"><span>Light</span><b id="g-pv">${m.pct}%</b><span>Strong</span></div></div>
+      <div class="field"><label for="g-g">Group</label><select id="g-g"><option value="soft" ${m.g==="soft"?"selected":""}>Soft Signature (office)</option><option value="royal" ${m.g==="royal"?"selected":""}>Royal & Arabic (party)</option></select></div>
       <div class="field"><label for="g-s">Season</label><select id="g-s">${opt(seasons,m.s)}</select></div>
-      <div class="field"><label for="g-o">Kis mauqe ke liye</label><input id="g-o" value="${esc(m.o)}"></div>
+      <div class="field"><label for="g-o">Occasion</label><input id="g-o" value="${esc(m.o)}"></div>
       <div class="field"><label for="g-i">Intensity: <b id="g-iv">${m.i||2}</b> / 5</label><input id="g-i" type="range" min="1" max="5" value="${m.i||2}"></div>
       <div class="field"><label for="g-t">Tip</label><input id="g-t" value="${esc(m.tip)}"></div>
-      <button class="btn primary" type="submit">${id?"Tabdeeli save karein":"Mix add karein"}</button>
+      <button class="btn primary" type="submit">${id?"Save changes":"Add mix"}</button>
     </form>`;
   showSheet();
   $("#g-r").oninput=e=>$("#g-rv").textContent=e.target.value+" : "+(100-e.target.value);
@@ -523,10 +524,10 @@ function mixForm(id,pre){
   $("#g-i").oninput=e=>$("#g-iv").textContent=e.target.value;
   $("#mform").onsubmit=e=>{e.preventDefault();
     const v=x=>$("#"+x).value.trim(); if(!v("g-n"))return;
-    if(v("g-a")===v("g-b")){toast("Dono perfume alag chunein");return}
+    if(v("g-a")===v("g-b")){toast("Choose two different perfumes");return}
     const obj={id:id||"",n:v("g-n"),d:v("g-d"),a:v("g-a"),b:v("g-b"),ra:+v("g-r"),pct:+v("g-p"),g:v("g-g"),s:v("g-s"),o:v("g-o"),i:+v("g-i"),tip:v("g-t"),bought:!!m.bought,date:m.date||"",note:m.note||"",fav:!!m.fav};
     $("#mform button[type=submit]").disabled=true;
-    serverWrite("saveMix",[obj],id?"Save ho gaya":"Mix add ho gaya").then(r=>{if(r&&r.id)openMix(r.id)});
+    serverWrite("saveMix",[obj],id?"Saved":"Mix added").then(r=>{if(r&&r.id)openMix(r.id)});
   };
 }
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),2200)}
@@ -539,18 +540,18 @@ function fillSelects(){
   $("#ca").value=P[c.a]?c.a:keys[0]; $("#cb").value=P[c.b]?c.b:keys[1]; $("#cr").value=c.r; $("#cp").value=c.p;
 }
 function renderCustom(){
-  if(!loaded){$("#custom-out").innerHTML='<div class="empty">Sheet se data aa raha hai…</div>';return}
+  if(!loaded){$("#custom-out").innerHTML='<div class="empty">Loading data from Sheet…</div>';return}
   if($("#ca").options.length!==Object.keys(P).length)fillSelects();
   const a=$("#ca").value,b=$("#cb").value,r=+$("#cr").value,p=+$("#cp").value;
   PREF.custom={a,b,r,p}; savePref();
   $("#crv").textContent=r+" : "+(100-r); $("#cpv").textContent=p+"%";
   let warn="";
   const strong=[a,b].filter(k=>(P[k].i||0)>=4).map(k=>P[k].n);
-  if(a===b) warn="Dono perfume aik hi hain. Mix ke liye alag perfume chunein.";
-  else if(strong.length&&p>25) warn=strong.join(" aur ")+" strong hai. Soft khushbu ke liye oil 25% ya kam rakhein.";
-  else if(p>30) warn="30% se zyada oil se khushbu tez ho jayegi.";
+  if(a===b) warn="Both perfumes are the same. Choose two different perfumes.";
+  else if(strong.length&&p>25) warn=strong.join(" and ")+(strong.length>1?" are":" is")+" strong. For a soft scent, keep oil at 25% or less.";
+  else if(p>30) warn="More than 30% oil will make the scent very strong.";
   $("#custom-out").innerHTML=mixPanel(P[a].n,P[b].n,r,p,"c")+(warn?`<div class="block tip"><p>${esc(warn)}</p></div>`:"")+
-    (a!==b?`<button class="btn primary" id="savecustom" style="width:100%;margin-top:12px">Is mix ko list mein save karein</button>`:"");
+    (a!==b?`<button class="btn primary" id="savecustom" style="width:100%;margin-top:12px">Save this mix to the list</button>`:"");
 }
 
 /* ---------- tabs & events ---------- */
@@ -559,8 +560,8 @@ function setTab(t){
   const br=$(".brand"); br.classList.remove("swap"); void br.offsetWidth; br.classList.add("swap");
   document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.tab===t)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
   $("#view-list").hidden=t==="custom"; $("#view-custom").hidden=t!=="custom"; $("#dockrow").hidden=t==="custom";
-  $("#fab").setAttribute("aria-label",t==="mixes"?"Naya mix add karein":"Naya perfume add karein");
-  const titles={mixes:["Mix formulas","Mix chunein aur gram ka hisaab dekhein"],perfumes:["Perfumes","Har perfume ke notes aur us ke mixes"],custom:["Apna mix","Koi bhi do perfume, apna ratio"]};
+  $("#fab").setAttribute("aria-label",t==="mixes"?"Add new mix":"Add new perfume");
+  const titles={mixes:["Mix formulas","Choose a mix and see the grams"],perfumes:["Perfumes","Notes and mixes for each perfume"],custom:["My mix","Any two perfumes, your own ratio"]};
   $("#title").firstChild.textContent=titles[t][0]; $("#subtitle").textContent=titles[t][1];
   if(t==="custom"){$("#count").textContent="";if(loaded)fillSelects();renderCustom()} else {renderChips();renderList()}
   window.scrollTo(0,0);
@@ -569,9 +570,8 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("button"); if(!t)return;
   if(t.type==="submit"&&t.closest("form"))return;
   if(t.dataset.tab) return setTab(t.dataset.tab);
-  if(t.dataset.f){filter=t.dataset.f;animateList=true;renderChips();renderList();return}
   if(t.id==="reset"){filter="all";$("#q").value="";renderChips();renderList();return}
-  if(t.id==="retry"){$("#results").innerHTML='<div class="empty">Sheet se data aa raha hai…</div>';return load()}
+  if(t.id==="retry"){$("#results").innerHTML='<div class="empty">Loading data from Sheet…</div>';return load()}
   if(t.dataset.mix) return openMix(t.dataset.mix);
   if(t.dataset.p) return openPerfume(t.dataset.p);
   if(t.id==="close") return closeSheet();
@@ -585,7 +585,8 @@ document.addEventListener("click",e=>{
     if(current&&current.type==="mix") openMix(current.id,$("#sheet").scrollTop||1); else if(tab==="custom") renderCustom(); return}
 });
 document.addEventListener("change",e=>{
-  if(e.target.id==="bnote"&&current){const it=itemOf();if(it){it.note=e.target.value;serverWrite("setStatus",[kindOf(),current.id,"note",e.target.value],"Note save ho gaya")}}
+  if(e.target.id==="filter"){filter=e.target.value;animateList=true;renderList();return}
+  if(e.target.id==="bnote"&&current){const it=itemOf();if(it){it.note=e.target.value;serverWrite("setStatus",[kindOf(),current.id,"note",e.target.value],"Note saved")}}
 });
 $("#ov").addEventListener("click",closeSheet);
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&current)closeSheet()});
@@ -597,7 +598,7 @@ load();
 
 if("serviceWorker" in navigator&&!hasGAS&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
 
-/* title page: tap/Enter se band, is session mein dobara nahi */
+/* title page: tap/Enter closes it; shown once per session */
 (function(){
   const s=$("#splash");
   if(hasGAS)s.style.setProperty("--img",'url("https://fam-de-studio.github.io/signature-scent/title.jpg")');

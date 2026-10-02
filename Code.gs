@@ -21,19 +21,19 @@ function json_(o) {
 }
 
 function api_(fn, args) {
-  if (!Object.prototype.hasOwnProperty.call(API, fn)) return { ok: false, error: 'Ghalat function' };
+  if (!Object.prototype.hasOwnProperty.call(API, fn)) return { ok: false, error: 'Invalid function' };
   try { return { ok: true, result: API[fn].apply(null, args || []) }; }
   catch (err) { return { ok: false, error: String(err && err.message || err) }; }
 }
 
 function doPost(e) {
   let req;
-  try { req = JSON.parse(e.postData.contents); } catch (err) { return json_({ ok: false, error: 'Ghalat request' }); }
+  try { req = JSON.parse(e.postData.contents); } catch (err) { return json_({ ok: false, error: 'Invalid request' }); }
   return json_(api_(req.fn, req.args));
 }
 
 function doGet(e) {
-  if (e && e.parameter && e.parameter.fn) return json_(e.parameter.fn === 'getData' ? api_('getData') : { ok: false, error: 'Sirf getData GET se' });
+  if (e && e.parameter && e.parameter.fn) return json_(e.parameter.fn === 'getData' ? api_('getData') : { ok: false, error: 'Only getData is allowed via GET' });
   return page_();
 }
 
@@ -47,7 +47,7 @@ function page_() {
 function sheet_(kind) {
   const ss = SPREADSHEET_ID ? SpreadsheetApp.openById(SPREADSHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
   const sh = ss.getSheetByName(TABS[kind].name);
-  if (!sh) throw new Error('Tab nahi mila: ' + TABS[kind].name);
+  if (!sh) throw new Error('Tab not found: ' + TABS[kind].name);
   return sh;
 }
 
@@ -95,7 +95,7 @@ function clean_(kind, obj) {
     if (NUMERIC.includes(k)) return Number(v) || 0;
     if (BOOLEAN.includes(k)) return v === true;
     v = v == null ? '' : String(v).slice(0, 500);
-    return /^[=+\-@]/.test(v) ? "'" + v : v; // formula injection se bachao
+    return /^[=+\-@]/.test(v) ? "'" + v : v; // guard against formula injection
   });
 }
 
@@ -125,13 +125,13 @@ function saveMix(obj)     { return save_('mix', obj); }
 function deletePerfume(id){ return delete_('perfume', id); }
 function deleteMix(id)    { return delete_('mix', id); }
 
-/** bought / fav / note ko update karta hai */
+/** updates bought / fav / note */
 function setStatus(kind, id, field, value) {
-  if (['bought','fav','note'].indexOf(field) < 0) throw new Error('Ghalat field');
+  if (['bought','fav','note'].indexOf(field) < 0) throw new Error('Invalid field');
   return withLock_(() => {
     const sh = sheet_(kind), f = TABS[kind].fields;
     const row = findRow_(sh, id);
-    if (row < 0) throw new Error('Item nahi mila');
+    if (row < 0) throw new Error('Item not found');
     if (field === 'note') {
       sh.getRange(row, f.indexOf('note') + 1).setValue(clean_(kind, { note: value })[f.indexOf('note')]);
     } else {
