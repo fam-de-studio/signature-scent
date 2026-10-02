@@ -61,7 +61,16 @@ h1 small{display:block;font-size:14px;font-weight:500;color:var(--muted);letter-
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
 .filterbar{display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:3;background:var(--bg);margin:6px -16px 0;padding:10px 16px}
 .filterbar .iconbtn{width:46px;height:46px;border-radius:14px;font-size:18px}
-.filterbar select{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:46px;padding:0 42px 0 14px;border-radius:14px;border:1px solid var(--line);font-size:16px;font-weight:600;cursor:pointer;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23B08A4A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 15px center}
+.dd{position:relative;flex:1;min-width:0}
+.ddbtn{width:100%;height:46px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);font-size:16px;font-weight:600;cursor:pointer;transition:border-color .2s ease}
+.ddbtn svg{color:var(--amber);flex:none;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.dd.open .ddbtn{border-color:var(--amber)}
+.dd.open .ddbtn svg{transform:rotate(180deg)}
+.ddmenu{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:4;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 16px 40px rgba(12,8,4,.35);opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:top center;transition:opacity .2s ease,transform .3s cubic-bezier(.2,.8,.2,1),visibility .2s}
+.dd.open .ddmenu{opacity:1;visibility:visible;transform:none}
+.ddmenu button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:46px;padding:0 12px;border:0;background:none;border-radius:11px;font-size:16px;font-weight:600;text-align:left;cursor:pointer}
+.ddmenu button[aria-selected="true"]{background:var(--glass);color:var(--amber)}
+.ddmenu button[aria-selected="true"]::after{content:"✓";font-weight:800}
 .chip{flex:none;border:1px solid var(--line);background:var(--surface);padding:9px 15px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
@@ -221,7 +230,7 @@ nav.tabs .in button[aria-current="page"] svg{animation:pop .4s cubic-bezier(.3,1
   </header>
 
   <section id="view-list">
-    <div class="filterbar"><select id="filter" aria-label="Filter"></select><button class="iconbtn" id="ffav" aria-pressed="false" aria-label="Show favourites only">★</button><button class="iconbtn" id="fbought" aria-pressed="false" aria-label="Show bought only">✓</button></div>
+    <div class="filterbar"><div class="dd" id="dd"><button class="ddbtn" id="filterbtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter"><span id="filterlbl"></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="ddmenu" id="filtermenu" role="listbox"></div></div><button class="iconbtn" id="ffav" aria-pressed="false" aria-label="Show favourites only">★</button><button class="iconbtn" id="fbought" aria-pressed="false" aria-label="Show bought only">✓</button></div>
     <div id="results"></div>
   </section>
 
@@ -307,7 +316,7 @@ function call(fn,...args){
 }
 
 /* ---------- local prefs ---------- */
-const LS="ss-gas-prefs";
+const LS="ss-gas-prefs", DATA_LS="ss-data";
 let PREF=(()=>{try{return Object.assign({size:50,custom:{a:"bdc",b:"narciso",r:50,p:30}},JSON.parse(localStorage.getItem(LS)||"{}"))}catch(e){return{size:50,custom:{a:"bdc",b:"narciso",r:50,p:30}}}})();
 const savePref=()=>{try{localStorage.setItem(LS,JSON.stringify(PREF))}catch(e){}};
 
@@ -317,9 +326,12 @@ function setData(d){
   P={}; d.perfumes.forEach(p=>P[p.id]=p);
   M=d.mixes.filter(m=>P[m.a]&&P[m.b]).map((m,i)=>Object.assign({},m,{no:i+1}));
   loaded=true;
+  try{localStorage.setItem(DATA_LS,JSON.stringify(d))}catch(e){}
 }
 function load(){
-  return call("getData").then(d=>{animateList=!loaded;setData(d);refresh()}).catch(err=>{
+  if(loaded)setBusy(true,"Updating…");
+  return call("getData").then(d=>{animateList=!loaded;setData(d);refresh();setBusy(false)}).catch(err=>{
+    if(loaded){$("#sync").textContent="Offline · saved list";return}
     $("#results").innerHTML=`<div class="empty">Could not load data: ${esc(err.message||err)}<br><button class="chip" id="retry">Try again</button></div>`;
   });
 }
@@ -328,7 +340,7 @@ function serverWrite(fn,args,okMsg){
   return call(fn,...args).then(r=>{const d=r&&r.data?r.data:r;setData(d);refresh();if(okMsg)toast(okMsg);return r})
     .catch(err=>{toast("Could not save: "+(err.message||err));load()}).finally(()=>setBusy(false));
 }
-function setBusy(b){$("#sync").hidden=false;$("#sync").textContent=b?"Saving…":"✓ Synced with Sheet"}
+function setBusy(b,msg){$("#sync").hidden=false;$("#sync").textContent=b?(msg||"Saving…"):"✓ Synced with Sheet"}
 
 function refresh(){
   if(tab==="custom")renderCustom();else{renderChips();renderList()}
@@ -357,7 +369,11 @@ function renderChips(){
   $("#ffav").classList.toggle("on",favOnly); $("#ffav").setAttribute("aria-pressed",favOnly);
   $("#fbought").classList.toggle("ok",boughtOnly); $("#fbought").setAttribute("aria-pressed",boughtOnly);
   $("#fbought").setAttribute("aria-label",tab==="mixes"?"Show made only":"Show bought only");
-  $("#filter").innerHTML=chipsFor().map(([k,l])=>`<option value="${k}" ${filter===k?"selected":""}>${l}</option>`).join("")}
+  const opts=chipsFor();
+  $("#filterlbl").textContent=(opts.find(o=>o[0]===filter)||opts[0])[1];
+  $("#filtermenu").innerHTML=opts.map(([k,l])=>`<button role="option" data-f="${k}" aria-selected="${filter===k}">${l}</button>`).join("");
+}
+function setDD(open){$("#dd").classList.toggle("open",open);$("#filterbtn").setAttribute("aria-expanded",open)}
 function passFilter(it,group){
   if(favOnly&&!it.fav)return false;
   if(boughtOnly&&!it.bought)return false;
@@ -573,7 +589,10 @@ function setTab(t){
   window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{
+  if(!e.target.closest("#dd"))setDD(false);
   const t=e.target.closest("button"); if(!t)return;
+  if(t.id==="filterbtn")return setDD(!$("#dd").classList.contains("open"));
+  if(t.dataset.f){filter=t.dataset.f;setDD(false);animateList=true;renderChips();renderList();return}
   if(t.type==="submit"&&t.closest("form"))return;
   if(t.dataset.tab) return setTab(t.dataset.tab);
   if(t.id==="reset"){filter="all";favOnly=boughtOnly=false;$("#q").value="";renderChips();renderList();return}
@@ -596,10 +615,12 @@ document.addEventListener("change",e=>{
   if(e.target.id==="bnote"&&current){const it=itemOf();if(it){it.note=e.target.value;serverWrite("setStatus",[kindOf(),current.id,"note",e.target.value],"Note saved")}}
 });
 $("#ov").addEventListener("click",closeSheet);
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&current)closeSheet()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){setDD(false);if(current)closeSheet()}});
 $("#q").addEventListener("input",renderList);
 ["ca","cb","cr","cp"].forEach(id=>$("#"+id).addEventListener("input",renderCustom));
 
+/* show the last saved list at once, then refresh from the Sheet */
+try{const c=JSON.parse(localStorage.getItem(DATA_LS)||"null");if(c&&c.perfumes&&c.mixes)setData(c)}catch(e){}
 setTab("perfumes");
 load();
 
