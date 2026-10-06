@@ -189,6 +189,11 @@ textarea,.field input:not([type=range]){font-family:inherit;width:100%;padding:1
 @keyframes shine{from{background-position:100% 0}to{background-position:0 0}}
 @keyframes glow{0%,100%{box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 0 rgba(224,176,96,.5)}50%{box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 12px rgba(224,176,96,0)}}
 
+.stars{display:flex;gap:6px;margin-top:8px}
+.star{flex:1;height:50px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:26px;line-height:1;color:var(--line);cursor:pointer;transition:color .2s ease,background .2s ease,border-color .2s ease,transform .12s ease}
+.star.on{color:var(--amber);border-color:var(--amber);background:var(--glass);animation:pop .35s cubic-bezier(.3,1.4,.5,1)}
+.star:active{transform:scale(.92)}
+.rate-badge{font-size:12px;font-weight:800;color:var(--amber);border:1px solid var(--amber);border-radius:999px;padding:1px 7px;white-space:nowrap}
 /* app motion */
 @keyframes itemin{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -364,7 +369,8 @@ const itemOf=()=>current.type==="mix"?M.find(m=>m.id===current.id):P[current.id]
 function chipsFor(){
   const base=[["all","All"],["Summer","Summer"],["Winter","Winter"],["All","All Season"]];
   const extra=tab==="mixes"?[["soft","Soft Signature"],["royal","Royal & Arabic"]]:[];
-  return base.concat(extra,[["notbought",tab==="mixes"?"Not made yet":"Not bought yet"]]);
+  const top=tab==="perfumes"?[["top","Rated 4★ & up"]]:[];
+  return base.concat(extra,top,[["notbought",tab==="mixes"?"Not made yet":"Not bought yet"]]);
 }
 function renderChips(){
   $("#ffav").classList.toggle("on",favOnly); $("#ffav").setAttribute("aria-pressed",favOnly);
@@ -382,10 +388,11 @@ function passFilter(it,group){
   if(filter==="fav")return it.fav;
   if(filter==="bought")return it.bought;
   if(filter==="notbought")return !it.bought;
+  if(filter==="top")return (it.rate||0)>=4;
   if(filter==="soft"||filter==="royal")return group===filter;
   return tagCls(it.s)==="t-"+filter;
 }
-const badges=it=>(it.fav?'<span class="fav" aria-label="Favourite">★</span>':"")+(it.bought?'<span class="bought" aria-label="Bought">✓</span>':"");
+const badges=it=>(it.rate?'<span class="rate-badge" aria-label="Rated '+it.rate+' of 5">★ '+it.rate+'</span>':"")+(it.fav?'<span class="fav" aria-label="Favourite">★</span>':"")+(it.bought?'<span class="bought" aria-label="Bought">✓</span>':"");
 function renderList(){
   if(!loaded){$("#results").innerHTML='<div class="empty">Loading data from Sheet…</div>';return}
   const q=$("#q").value.trim().toLowerCase(); let html="";
@@ -405,6 +412,7 @@ function renderList(){
     });
   } else {
     const items=Object.values(P).filter(p=>passFilter(p)&&(!q||has([p.n,p.b,p.t,p.h,p.ba,p.c])));
+    if(filter==="top")items.sort((a,b)=>(b.rate||0)-(a.rate||0));
     $("#count").textContent=items.length+" perfumes";
     if(items.length) html='<div class="list" style="margin-top:6px">'+items.map((p,i)=>`
       <button class="item" style="--i:${Math.min(i,10)}" data-p="${esc(p.id)}">
@@ -468,7 +476,9 @@ function openPerfume(k,keep){
       <div class="tier"><b>Heart notes</b>${esc(p.h)||"—"}</div>
       <div class="tier"><b>Base notes</b>${esc(p.ba)||"—"}</div>
     </div>
-    <div class="meta"><span class="tag ${tagCls(p.s)}">${esc(p.s)}</span>${p.o?`<span class="pill">${esc(p.o)}</span>`:""}${p.q?`<span class="pill">Impression ${"★".repeat(p.q)}${"☆".repeat(Math.max(0,3-p.q))}</span>`:""}<span class="pill">Intensity ${dots(p.i)}</span></div>
+    <div class="meta"><span class="tag ${tagCls(p.s)}">${esc(p.s)}</span>${p.o?`<span class="pill">${esc(p.o)}</span>`:""}<span class="pill">Intensity ${dots(p.i)}</span></div>
+    <div class="block"><h3>My rating <span class="muted" id="ratelbl">${RATE_TXT[p.rate||0]}</span></h3>
+      <div class="stars" role="radiogroup" aria-label="My rating">${[1,2,3,4,5].map(i=>`<button class="star ${i<=(p.rate||0)?"on":""}" data-rate="${i}" role="radio" aria-checked="${i===(p.rate||0)}" aria-label="${i} of 5">★</button>`).join("")}</div></div>
     ${boughtBlock(p,"Oil bought")}
     <div class="block"><h3>${used.length?"Mixes with this perfume":"No mixes with this perfume yet"}</h3>
       ${used.length?`<div class="links">${used.map(m=>`<button class="linkbtn" data-mix="${esc(m.id)}">${esc(m.n)}<span>with ${esc(P[m.a===k?m.b:m.a].n)} ›</span></button>`).join("")}</div>`:`<p>Try it with any perfume in the "My mix" tab.</p>`}
@@ -483,6 +493,12 @@ function toggle(field){
   const it=itemOf(); if(!it)return; const v=!it[field];
   it[field]=v; if(field==="bought")it.date=v?new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";
   refresh(); serverWrite("setStatus",[kindOf(),current.id,field,v]);
+}
+const RATE_TXT=["Tap a star","Not for me","Okay","Good","Great","Love it"];
+function setRate(n){
+  const it=itemOf(); if(!it||current.type!=="p")return;
+  const v=(it.rate||0)===n?0:n; it.rate=v;
+  refresh(); serverWrite("setStatus",["perfume",current.id,"rate",v]);
 }
 function askDelete(btn){
   if(!btn.dataset.sure){btn.dataset.sure="1";btn.textContent="Sure? Tap again to delete";return}
@@ -602,6 +618,7 @@ document.addEventListener("click",e=>{
   if(t.dataset.mix) return openMix(t.dataset.mix);
   if(t.dataset.p) return openPerfume(t.dataset.p);
   if(t.id==="close") return closeSheet();
+  if(t.dataset.rate) return setRate(+t.dataset.rate);
   if(t.id==="favbtn") return toggle("fav");
   if(t.id==="buybtn") return toggle("bought");
   if(t.id==="delbtn") return askDelete(t);

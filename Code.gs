@@ -4,10 +4,10 @@
  */
 const SPREADSHEET_ID = '1VhzH0hJvAiKtT4xlyHesqBG76MvpJYKbHASr7uzbviY';
 const TABS = {
-  perfume: { name: 'App_Perfumes', fields: ['id','n','b','s','t','h','ba','c','o','q','i','bought','date','note','fav'] },
+  perfume: { name: 'App_Perfumes', fields: ['id','n','b','s','t','h','ba','c','o','q','i','bought','date','note','fav','rate'] },
   mix:     { name: 'App_Mixes',    fields: ['id','n','d','a','b','ra','pct','g','s','o','i','tip','bought','date','note','fav'] }
 };
-const NUMERIC = ['q','i','ra','pct'];
+const NUMERIC = ['q','i','ra','pct','rate'];
 const BOOLEAN = ['bought','fav'];
 
 /** JSON API (GitHub Pages front-end). GET ?fn=getData, POST {fn,args} as text/plain */
@@ -127,12 +127,15 @@ function deleteMix(id)    { return delete_('mix', id); }
 
 /** updates bought / fav / note */
 function setStatus(kind, id, field, value) {
-  if (['bought','fav','note'].indexOf(field) < 0) throw new Error('Invalid field');
+  if (['bought','fav','note','rate'].indexOf(field) < 0) throw new Error('Invalid field');
   return withLock_(() => {
     const sh = sheet_(kind), f = TABS[kind].fields;
     const row = findRow_(sh, id);
     if (row < 0) throw new Error('Item not found');
-    if (field === 'note') {
+    if (field === 'rate') {
+      if (f.indexOf('rate') < 0) throw new Error('Invalid field');
+      sh.getRange(row, f.indexOf('rate') + 1).setValue(Math.max(0, Math.min(5, Math.round(Number(value)) || 0)));
+    } else if (field === 'note') {
       sh.getRange(row, f.indexOf('note') + 1).setValue(clean_(kind, { note: value })[f.indexOf('note')]);
     } else {
       sh.getRange(row, f.indexOf(field) + 1).setValue(value === true);
