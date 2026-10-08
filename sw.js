@@ -1,4 +1,4 @@
-const C="ss-v4",ASSETS=["./","index.html","title.jpg","manifest.webmanifest","logo.png","icon-192.png","icon-512.png"];
+const C="ss-v5",ASSETS=["./","index.html","title.jpg","manifest.webmanifest","logo.png","icon-192.png","icon-512.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(ASSETS)));self.skipWaiting()});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
 self.addEventListener("fetch",e=>{
